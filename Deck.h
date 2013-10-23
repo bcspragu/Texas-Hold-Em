@@ -1,3 +1,6 @@
+#ifndef DECK_H
+#define DECK_H
+
 #include <vector>
 #include "Card.h"
 
@@ -9,4 +12,6 @@ class Deck {
     ~Deck(void);
     vector<Card> cards;
     void shuffle();
-}
+};
+
+#endif

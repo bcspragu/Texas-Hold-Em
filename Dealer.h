@@ -1,14 +1,21 @@
+#ifndef DEALER_H
+#define DEALER_H
+
+#include "Card.h"
+#include "Deck.h"
+#include "Player.h"
+
 class Dealer {
   public:
     Dealer();
     ~Dealer(void);
     Deck deck;
-    Card[] community;
+    Card community[];
     int pot;
-    Player[] players;
+    Player players[];
     Player *currentPlayer;
     Player *smallBlindHolder;
-    Player[] determineWinner();
+    Player* determineWinner();
     void dealHands();
     void dealFlop();
     void dealRiver();
@@ -18,4 +25,6 @@ class Dealer {
     void endGame();
     void restartGame();
     bool userStillAlive();
-}
+};
+
+#endif
