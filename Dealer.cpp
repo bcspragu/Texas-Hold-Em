@@ -1,5 +1,9 @@
 #include "Dealer.h"
 
-Dealer(){}
-~Dealer(){}
+Dealer::Dealer(){
+  deck.shuffle();
+}
+
+Dealer::~Dealer(void){}
+
 

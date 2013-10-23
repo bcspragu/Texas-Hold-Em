@@ -1,5 +1,7 @@
 class Dealer {
   public:
+    Dealer();
+    ~Dealer(void);
     Deck deck;
     Card[] community;
     int pot;

@@ -9,6 +9,8 @@ enum Value {ONE, TWO,
 
 class Card {
   public:
+    Card(Suit, Value);
+    ~Card(void);
     Suit suit;
     Value value;
 }
