@@ -2,7 +2,7 @@
 #define SUITVALUE_H
 
 enum Suit {SPADES, DIAMONDS, HEARTS, CLUBS};
-enum Value {ONE, TWO,
+enum Value {TWO,
       THREE, FOUR,
       FIVE, SIX,
       SEVEN, EIGHT,

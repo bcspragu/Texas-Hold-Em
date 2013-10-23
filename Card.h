@@ -1,7 +1,10 @@
 #ifndef CARD_H
 #define CARD_H
 
+#include <string>
 #include "SuitValue.h"
+
+using std::string;
 
 class Card {
   public:
@@ -11,6 +14,7 @@ class Card {
     Value value;
     static Suit suitFromInt(int i);
     static Value valueFromInt(int i);
+    string cardString();
 };
 
 #endif

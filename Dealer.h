@@ -1,6 +1,7 @@
 #ifndef DEALER_H
 #define DEALER_H
 
+#include <vector>
 #include "Card.h"
 #include "Deck.h"
 #include "Player.h"
@@ -10,9 +11,9 @@ class Dealer {
     Dealer();
     ~Dealer(void);
     Deck deck;
-    Card community[];
+    vector<Card> community;
     int pot;
-    Player players[];
+    vector<Player> players;
     Player *currentPlayer;
     Player *smallBlindHolder;
     Player* determineWinner();
