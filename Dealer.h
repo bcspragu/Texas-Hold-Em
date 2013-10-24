@@ -11,9 +11,9 @@ class Dealer {
     Dealer();
     ~Dealer(void);
     Deck deck;
-    vector<Card> community;
+    std::vector<Card> community;
     int pot;
-    vector<Player> players;
+    std::vector<Player> players;
     Player *currentPlayer;
     Player *smallBlindHolder;
     Player* determineWinner();
@@ -26,6 +26,16 @@ class Dealer {
     void endGame();
     void restartGame();
     bool userStillAlive();
+    static bool royalFlush(std::vector<Card> hand);
+    static bool straightFlush(std::vector<Card> hand);
+    static bool fourOfAKind(std::vector<Card> hand);
+    static bool fullHouse(std::vector<Card> hand);
+    static bool flush(std::vector<Card> hand);
+    static bool straight(std::vector<Card> hand);
+    static bool threeOfAKind(std::vector<Card> hand);
+    static bool twoPair(std::vector<Card> hand);
+    static bool pair(std::vector<Card> hand);
+    static Value highestValue(std::vector<Card> hand);
 };
 
 #endif

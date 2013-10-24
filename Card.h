@@ -15,6 +15,7 @@ class Card {
     static Suit suitFromInt(int i);
     static Value valueFromInt(int i);
     string cardString();
+    bool operator<(const Card &other) const;
 };
 
 #endif

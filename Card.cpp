@@ -137,3 +137,7 @@ string Card::cardString(){
   }
   return valString+" "+suitString;
 }
+
+bool Card::operator<(const Card &other) const {
+  return value < other.value;
+}

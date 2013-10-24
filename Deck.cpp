@@ -3,8 +3,6 @@
 #include "Card.h"
 #include "SuitValue.h"
 
-using namespace std;
-
 Deck::Deck(){
   for(int i = 0; i < 52; i++){
     Suit s = Card::suitFromInt(i/13);
