@@ -14,6 +14,6 @@ Deck::Deck(){
 Deck::~Deck(){}
 
 void Deck::shuffle(){
-  random_shuffle(cards.begin(),cards.end());
+  std::random_shuffle(cards.begin(),cards.end());
 }
 

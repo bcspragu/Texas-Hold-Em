@@ -9,14 +9,18 @@
 using std::cout;
 using std::endl;
 
+void testCardChecking();
 int main(){
   Dealer d;
   std::vector<Card>::iterator itr;
   std::vector<Card> cards = d.deck.cards;
   //This chunk of code prints out each card in cards
+  /*
   for(itr = cards.begin(); itr != cards.end(); ++itr){
-    cout << (*itr).cardString() << endl;
+    cout << (*itr).shortCardString() << endl;
   }
+  */
+  testCardChecking();
 }
 
 Dealer::Dealer(){
@@ -174,4 +178,15 @@ bool Dealer::pair(std::vector<Card> hand){
 Value Dealer::highestValue(std::vector<Card> hand){
   std::sort(hand.begin(),hand.end());
   return hand.back().value;
+}
+
+void testCardChecking(){
+  std::vector<Card> hand;
+  hand.push_back(Card("AH"));
+  hand.push_back(Card("KH"));
+  hand.push_back(Card("QH"));
+  hand.push_back(Card("JH"));
+  hand.push_back(Card("10H"));
+
+  cout << Dealer::royalFlush(hand) << endl;
 }

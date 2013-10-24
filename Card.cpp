@@ -9,6 +9,53 @@ Card::Card(Suit s, Value v){
   value = v;
 }
 
+Card::Card(string s){
+  string su;
+  string va;
+  va += s[0];
+  if(s[0] == '1'){
+    va += s[1];
+  }
+  //Last character
+  su = *s.rbegin();
+  if(va == "2"){
+    value = (Value)0;
+  }else if(va == "3"){
+    value = (Value)1;
+  }else if(va == "4"){
+    value = (Value)2;
+  }else if(va == "5"){
+    value = (Value)3;
+  }else if(va == "6"){
+    value = (Value)4;
+  }else if(va == "7"){
+    value = (Value)5;
+  }else if(va == "8"){
+    value = (Value)6;
+  }else if(va == "9"){
+    value = (Value)7;
+  }else if(va == "10"){
+    value = (Value)8;
+  }else if(va == "J"){
+    value = (Value)9;
+  }else if(va == "Q"){
+    value = (Value)10;
+  }else if(va == "K"){
+    value = (Value)11;
+  }else if(va == "A"){
+    value = (Value)12;
+  } 
+  if(su == "S"){
+    suit = (Suit)0;
+  }else if(su == "D"){
+    suit = (Suit)1;
+  }else if(su == "H"){
+    suit = (Suit)2;
+  }else if(su == "C"){
+    suit = (Suit)3;
+  }
+}
+
 Card::~Card(){}
 
 Suit Card::suitFromInt(int i){
@@ -136,6 +183,29 @@ string Card::cardString(){
       break;
   }
   return valString+" "+suitString;
+}
+
+//Take the original cardString, and shorten it. ex King of Hearts = KH
+string Card::shortCardString(){
+  string cardString = Card::cardString();
+  string shortString;
+  int spaceCount = 0;
+  string::iterator itr;
+  shortString += cardString[0];
+  if(cardString[0] == '1'){
+    shortString += cardString[1];
+  }
+  for(itr = cardString.begin(); itr < cardString.end(); itr++){
+    if(spaceCount == 2){
+      shortString += (*itr);
+      break;
+    }
+    //Character is a space
+    if((*itr) == ' '){
+      spaceCount++;
+    }
+  }
+  return shortString;
 }
 
 bool Card::operator<(const Card &other) const {
