@@ -10,6 +10,7 @@ class Deck {
     ~Deck(void);
     std::vector<Card> cards;
     void shuffle();
+    Card dealCard();
 };
 
 #endif
