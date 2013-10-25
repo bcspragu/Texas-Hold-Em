@@ -15,12 +15,10 @@ int main(){
   std::vector<Card>::iterator itr;
   std::vector<Card> cards = d.deck.cards;
   //This chunk of code prints out each card in cards
-  /*
   for(itr = cards.begin(); itr != cards.end(); ++itr){
     cout << (*itr).shortCardString() << endl;
   }
-  */
-  testCardChecking();
+  //testCardChecking();
 }
 
 Dealer::Dealer(){
