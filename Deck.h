@@ -11,6 +11,7 @@ class Deck {
     std::vector<Card> cards;
     void shuffle();
     Card dealCard();
+    int cardCount();
 };
 
 #endif

@@ -6,26 +6,26 @@ Player::Player(int startingAmount){
 
 Player::~Player(){}
 
-bool bet(int amount){
+bool Player::bet(int amount){
   return true;
 }
 
-bool raise(int amount){
+bool Player::raise(int amount){
   return true;
 }
 
-bool check(){
+bool Player::check(){
   return true;
 }
 
-bool call(){
+bool Player::call(){
   return true;
 }
 
-bool fold(){
+bool Player::fold(){
   return true;
 }
 
-bool allIn(){
+bool Player::allIn(){
   return true;
 }

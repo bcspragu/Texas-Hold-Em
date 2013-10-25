@@ -22,3 +22,7 @@ Card Deck::dealCard(){
   cards.erase(cards.begin());
   return top;
 }
+
+int Deck::cardCount(){
+  return cards.size();
+}
