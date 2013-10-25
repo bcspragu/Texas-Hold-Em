@@ -17,3 +17,8 @@ void Deck::shuffle(){
   std::random_shuffle(cards.begin(),cards.end());
 }
 
+Card Deck::dealCard(){
+  Card top = cards.front();
+  cards.erase(cards.begin());
+  return top;
+}
