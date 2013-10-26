@@ -10,6 +10,8 @@ using std::cout;
 using std::endl;
 
 void testCardChecking();
+void testHand(std::vector<Card> hand);
+
 int main(){
   Dealer d;
   testCardChecking();
@@ -186,17 +188,23 @@ void testCardChecking(){
   royal.push_back(Card("QH"));
   royal.push_back(Card("JH"));
   royal.push_back(Card("10H"));
+  testHand(royal);
 
-  cout << "Royal: " << Dealer::royalFlush(royal) << endl;
-  cout << "Straight Flush: " << Dealer::straightFlush(royal) << endl;
-  cout << "Four of a Kind: " << Dealer::fourOfAKind(royal) << endl;
-  cout << "Full House: " << Dealer::fullHouse(royal) << endl;
-  cout << "Flush: " << Dealer::flush(royal) << endl;
-  cout << "Straight: " << Dealer::straight(royal) << endl;
-  cout << "Three of a Kind: " << Dealer::threeOfAKind(royal) << endl;
-  cout << "Two Pair:" << Dealer::twoPair(royal) << endl;
-  cout << "Pair: " << Dealer::pair(royal) << endl;
-  cout << "Highest Value: " << Dealer::highestValue(royal) << endl;
+  std::vector<Card> straightf;
+  straightf.push_back(Card("9H"));
+  straightf.push_back(Card("KH"));
+  straightf.push_back(Card("QH"));
+  straightf.push_back(Card("JH"));
+  straightf.push_back(Card("10H"));
+  testHand(straightf);
+
+  std::vector<Card> four;
+  four.push_back(Card("9H"));
+  four.push_back(Card("9C"));
+  four.push_back(Card("9S"));
+  four.push_back(Card("9D"));
+  four.push_back(Card("10H"));
+  testHand(four);
 
   std::vector<Card> full;
   full.push_back(Card("KH"));
@@ -204,17 +212,31 @@ void testCardChecking(){
   full.push_back(Card("KD"));
   full.push_back(Card("JH"));
   full.push_back(Card("JS"));
+  testHand(full);
 
-  cout << "Royal: " << Dealer::royalFlush(full) << endl;
-  cout << "Straight Flush: " << Dealer::straightFlush(full) << endl;
-  cout << "Four of a Kind: " << Dealer::fourOfAKind(full) << endl;
-  cout << "Full House: " << Dealer::fullHouse(full) << endl;
-  cout << "Flush: " << Dealer::flush(full) << endl;
-  cout << "Straight: " << Dealer::straight(full) << endl;
-  cout << "Three of a Kind: " << Dealer::threeOfAKind(full) << endl;
-  cout << "Two Pair:" << Dealer::twoPair(full) << endl;
-  cout << "Pair: " << Dealer::pair(full) << endl;
-  cout << "Highest Value: " << Dealer::highestValue(full) << endl;
+  std::vector<Card> flush;
+  flush.push_back(Card("8H"));
+  flush.push_back(Card("2H"));
+  flush.push_back(Card("7H"));
+  flush.push_back(Card("4H"));
+  flush.push_back(Card("AH"));
+  testHand(flush);
+
+  std::vector<Card> straight;
+  straight.push_back(Card("5H"));
+  straight.push_back(Card("6C"));
+  straight.push_back(Card("8D"));
+  straight.push_back(Card("7S"));
+  straight.push_back(Card("4C"));
+  testHand(straight);
+
+  std::vector<Card> three;
+  three.push_back(Card("8H"));
+  three.push_back(Card("8C"));
+  three.push_back(Card("8D"));
+  three.push_back(Card("2H"));
+  three.push_back(Card("5S"));
+  testHand(three);
 
   std::vector<Card> two;
   two.push_back(Card("3H"));
@@ -222,15 +244,67 @@ void testCardChecking(){
   two.push_back(Card("4D"));
   two.push_back(Card("2H"));
   two.push_back(Card("2S"));
+  testHand(two);
 
-  cout << "Royal: " << Dealer::royalFlush(two) << endl;
-  cout << "Straight Flush: " << Dealer::straightFlush(two) << endl;
-  cout << "Four of a Kind: " << Dealer::fourOfAKind(two) << endl;
-  cout << "two House: " << Dealer::fullHouse(two) << endl;
-  cout << "Flush: " << Dealer::flush(two) << endl;
-  cout << "Straight: " << Dealer::straight(two) << endl;
-  cout << "Three of a Kind: " << Dealer::threeOfAKind(two) << endl;
-  cout << "Two Pair:" << Dealer::twoPair(two) << endl;
-  cout << "Pair: " << Dealer::pair(two) << endl;
-  cout << "Highest Value: " << Dealer::highestValue(two) << endl;
+  std::vector<Card> pair;
+  pair.push_back(Card("3H"));
+  pair.push_back(Card("3C"));
+  pair.push_back(Card("4D"));
+  pair.push_back(Card("7H"));
+  pair.push_back(Card("AS"));
+  testHand(pair);
+
+  std::vector<Card> high;
+  high.push_back(Card("7H"));
+  high.push_back(Card("3C"));
+  high.push_back(Card("2D"));
+  high.push_back(Card("9H"));
+  high.push_back(Card("JS"));
+  testHand(high);
+}
+
+void testHand(std::vector<Card> hand){
+  string handString = "Cards in hand: ";
+  std::vector<Card>::iterator itr;
+  for(itr = hand.begin(); itr != hand.end(); ++itr){
+    handString += (*itr).shortCardString() + " ";
+  }
+  cout << handString << endl << "Hand is ";
+  if(Dealer::royalFlush(hand)){
+    cout << "a Royal Flush" << endl;
+    return;
+  }
+  if(Dealer::straightFlush(hand)){
+    cout << "a Straight Flush" << endl;
+    return;
+  }
+  if(Dealer::fourOfAKind(hand)){
+    cout << "Four of a Kind" << endl;
+    return;
+  }
+  if(Dealer::fullHouse(hand)){
+    cout << "a Full House" << endl;
+    return;
+  }
+  if(Dealer::flush(hand)){
+    cout << "a Flush" << endl;
+    return;
+  }
+  if(Dealer::straight(hand)){
+    cout << "a Straight" << endl;
+    return;
+  }
+  if(Dealer::threeOfAKind(hand)){
+    cout << "Three of a Kind" << endl;
+    return;
+  }
+  if(Dealer::twoPair(hand)){
+    cout << "Two Pair" << endl;
+    return;
+  }
+  if(Dealer::pair(hand)){
+    cout << "a Pair" << endl;
+    return;
+  }
+  cout << "High card value: " << Dealer::highestValue(hand) << endl;
 }
