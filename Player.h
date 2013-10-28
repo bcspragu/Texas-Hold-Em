@@ -6,8 +6,6 @@
 
 class Player {
   public:
-    Player(int startingAmount);
-    ~Player(void);
     std::vector<Card> hand;
     int wallet;
     int scoreHand();

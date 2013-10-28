@@ -12,6 +12,7 @@ class Deck {
     void shuffle();
     Card dealCard();
     int cardCount();
+    static string displayHand(std::vector<Card> cards);
 };
 
 #endif

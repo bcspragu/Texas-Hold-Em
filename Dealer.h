@@ -5,6 +5,9 @@
 #include "Card.h"
 #include "Deck.h"
 #include "Player.h"
+#include "User.h"
+
+const int smallBlind = 100;
 
 class Dealer {
   public:
@@ -14,8 +17,8 @@ class Dealer {
     std::vector<Card> community;
     int pot;
     std::vector<Player> players;
-    Player *currentPlayer;
-    Player *smallBlindHolder;
+    Player* currentPlayer;
+    Player* smallBlindHolder;
     Player* determineWinner();
     void dealHands();
     void dealFlop();

@@ -26,3 +26,12 @@ Card Deck::dealCard(){
 int Deck::cardCount(){
   return cards.size();
 }
+
+string Deck::displayHand(std::vector<Card> cards){
+  string handString = "";
+  std::vector<Card>::iterator itr;
+  for(itr = cards.begin(); itr != cards.end(); ++itr){
+    handString += (*itr).shortCardString() + " ";
+  }
+  return handString;
+}

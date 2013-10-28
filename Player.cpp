@@ -1,11 +1,5 @@
 #include "Player.h"
 
-Player::Player(int startingAmount){
-  wallet = startingAmount;
-}
-
-Player::~Player(){}
-
 bool Player::bet(int amount){
   return true;
 }

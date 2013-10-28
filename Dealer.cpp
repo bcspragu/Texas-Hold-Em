@@ -5,8 +5,12 @@
 #include "Deck.h"
 #include "Dealer.h"
 #include "Card.h"
+#include "Player.h"
+#include "User.h"
+#include "Computer.h"
 
 using std::cout;
+using std::cin;
 using std::endl;
 
 void testHands();
@@ -19,6 +23,10 @@ int main(){
 
 Dealer::Dealer(){
   deck.shuffle();
+  players.push_back(User(500));
+  for(int i = 0; i < 5; i++){
+    players.push_back(Computer(500));
+  }
   std::vector<Player>::iterator pitr;
   //Deal two cards to each player
   for(int i = 0; i < 2; i++){
@@ -26,10 +34,38 @@ Dealer::Dealer(){
       (*pitr).hand.push_back(deck.dealCard());
     }
   }
+
+  while(userStillAlive()){
+    //Show everyone their cards, take everyones input
+    string choice;
+    cout << "Your cards: " << Deck::displayHand(players.front().hand) << endl;
+    cout << "Your choice: ";
+    cin >> choice;
+    if(choice == "bet"){
+      int amount;
+      cout << "How much: ";
+      cin >> amount;
+      if(amount < players.front().wallet){
+        players.front().wallet -= amount;
+        pot += amount;
+      }
+    }
+    //Deal three cards
+    //Take everyone's input
+    //Deal a card
+    //Take everyone's input
+    //Deal a card
+    //Take everyone's input
+    
+  }
 }
 
 Dealer::~Dealer(void){}
 
+bool Dealer::userStillAlive(){
+  //First player is user, smallBlind*2 is large blind
+  return players.front().wallet > smallBlind*2;
+}
 //A royal flush is just a straight flush from 10-ACE
 bool Dealer::royalFlush(std::vector<Card> hand){
   return straightFlush(hand) && highestValue(hand) == ACE;
@@ -453,12 +489,8 @@ void testHands(){
 }
 
 void testHand(std::vector<Card> hand){
-  string handString = "Cards in hand: ";
-  std::vector<Card>::iterator itr;
-  for(itr = hand.begin(); itr != hand.end(); ++itr){
-    handString += (*itr).shortCardString() + " ";
-  }
-  cout << handString << endl << "Hand is ";
+  cout << Deck::displayHand(hand) << endl;
+  cout << "Hand is ";
   if(Dealer::royalFlush(hand)){
     cout << "a Royal Flush" << endl;
     cout << "Score: " << Dealer::scoreHand(hand) << endl;
