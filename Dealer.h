@@ -5,7 +5,7 @@
 #include "Card.h"
 #include "Deck.h"
 #include "Player.h"
-
+#include "Computer.h"
 class Dealer {
   public:
     Dealer();
@@ -13,6 +13,7 @@ class Dealer {
     Deck deck;
     std::vector<Card> community;
     int pot;
+    int test;
     std::vector<Player> players;
     Player *currentPlayer;
     Player *smallBlindHolder;

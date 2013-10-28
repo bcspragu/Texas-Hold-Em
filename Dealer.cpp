@@ -5,6 +5,7 @@
 #include "Deck.h"
 #include "Dealer.h"
 #include "Card.h"
+#include "Computer.h"
 
 using std::cout;
 using std::endl;
@@ -450,6 +451,14 @@ void testHands(){
   high.push_back(Card("9H"));
   high.push_back(Card("JS"));
   testHand(high);
+
+  std::vector<Card> pocket;
+  pocket.push_back(Card("JS"));
+  pocket.push_back(Card("QH"));
+	//int test=0;
+	//test=Computer.ratePocketCards(pocket);
+	cout <<"THIS IS RESULT OF POCKET CHECKER: " << Computer::ratePocketCards(pocket) << endl;
+
 }
 
 void testHand(std::vector<Card> hand){
