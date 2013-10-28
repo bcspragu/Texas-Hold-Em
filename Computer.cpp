@@ -1,11 +1,11 @@
-#include "Computer.h"
 #include <iostream>
 #include <map>
 #include <algorithm>
+#include "Computer.h"
 //Needs to look at cards in hand and on table and decide whether to 
-  //bet, call, or fold. This senario will be different for the first
-  //round of betting, due to the fact that it is an incomplete hand
-  //(only 2 cards) and is highly subjective to chance
+//bet, call, or fold. This senario will be different for the first
+//round of betting, due to the fact that it is an incomplete hand
+//(only 2 cards) and is highly subjective to chance
 
 using std::cout;
 using std::endl;

@@ -5,8 +5,8 @@
 #include "Card.h"
 #include "Deck.h"
 #include "Player.h"
-#include "Computer.h"
 #include "User.h"
+#include "Computer.h"
 
 const int smallBlind = 100;
 
@@ -19,10 +19,10 @@ class Dealer {
     std::vector<Card> community;
     int pot;
     int test;
-    std::vector<Player> players;
     Player* currentPlayer;
     Player* smallBlindHolder;
     Player* determineWinner();
+    std::vector<Computer> computers;
     void dealHands();
     void dealFlop();
     void dealRiver();

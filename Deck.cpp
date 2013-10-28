@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <time.h>
 #include "Deck.h"
 #include "Card.h"
 #include "SuitValue.h"
@@ -14,6 +15,7 @@ Deck::Deck(){
 Deck::~Deck(){}
 
 void Deck::shuffle(){
+  std::srand(time(0));
   std::random_shuffle(cards.begin(),cards.end());
 }
 

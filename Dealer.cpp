@@ -5,7 +5,6 @@
 #include "Deck.h"
 #include "Dealer.h"
 #include "Card.h"
-
 #include "Player.h"
 #include "User.h"
 #include "Computer.h"
@@ -24,14 +23,15 @@ int main(){
 
 Dealer::Dealer(){
   deck.shuffle();
-  players.push_back(User(500));
   for(int i = 0; i < 5; i++){
-    players.push_back(Computer(500));
+    computers.push_back(Computer(500));
   }
-  std::vector<Player>::iterator pitr;
+  User user = User(500);
+  std::vector<Computer>::iterator pitr;
   //Deal two cards to each player
   for(int i = 0; i < 2; i++){
-    for(pitr = players.begin(); pitr != players.end(); ++pitr){
+    user.hand.push_back(deck.dealCard());
+    for(pitr = computers.begin(); pitr != computers.end(); ++pitr){
       (*pitr).hand.push_back(deck.dealCard());
     }
   }
@@ -39,18 +39,21 @@ Dealer::Dealer(){
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
     string choice;
-    cout << "Your cards: " << Deck::displayHand(players.front().hand) << endl;
+    cout << "Your cards: " << Deck::displayHand(user.hand) << endl;
     cout << "Your choice: ";
     cin >> choice;
     if(choice == "bet"){
       int amount;
       cout << "How much: ";
       cin >> amount;
-      if(amount < players.front().wallet){
-        players.front().wallet -= amount;
+      if(amount < user.wallet){
+        user.wallet -= amount;
         pot += amount;
+      }else{
+        cout << "You don't have that much money" << endl;
       }
-    }
+    }    
+
     //Deal three cards
     //Take everyone's input
     //Deal a card
@@ -65,7 +68,7 @@ Dealer::~Dealer(void){}
 
 bool Dealer::userStillAlive(){
   //First player is user, smallBlind*2 is large blind
-  return players.front().wallet > smallBlind*2;
+  return computers.front().wallet > smallBlind*2;
 }
 //A royal flush is just a straight flush from 10-ACE
 bool Dealer::royalFlush(std::vector<Card> hand){
@@ -487,14 +490,6 @@ void testHands(){
   high.push_back(Card("9H"));
   high.push_back(Card("JS"));
   testHand(high);
-
-  std::vector<Card> pocket;
-  pocket.push_back(Card("JS"));
-  pocket.push_back(Card("QH"));
-	//int test=0;
-	//test=Computer.ratePocketCards(pocket);
-	cout <<"THIS IS RESULT OF POCKET CHECKER: " << Computer::ratePocketCards(pocket) << endl;
-
 }
 
 void testHand(std::vector<Card> hand){
