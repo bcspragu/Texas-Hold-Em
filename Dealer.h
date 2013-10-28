@@ -6,6 +6,11 @@
 #include "Deck.h"
 #include "Player.h"
 #include "Computer.h"
+#include "User.h"
+
+const int smallBlind = 100;
+
+
 class Dealer {
   public:
     Dealer();
@@ -15,8 +20,8 @@ class Dealer {
     int pot;
     int test;
     std::vector<Player> players;
-    Player *currentPlayer;
-    Player *smallBlindHolder;
+    Player* currentPlayer;
+    Player* smallBlindHolder;
     Player* determineWinner();
     void dealHands();
     void dealFlop();

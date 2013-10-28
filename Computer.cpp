@@ -13,7 +13,6 @@ using std::endl;
 Computer::Computer(int startingAmount){
    wallet = startingAmount;
  }
-Computer::~Computer(void){}
 
   int Computer::ratePocketCards(std::vector<Card> hand){
   int great=0;
@@ -85,6 +84,5 @@ Computer::~Computer(void){}
 
 
 //"Bad" Pocket Cards:
-
 
 

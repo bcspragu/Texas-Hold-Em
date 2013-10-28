@@ -2,6 +2,7 @@
 #define COMPUTER_H
 
 
+
 #include <vector>
 #include "Card.h"
 #include "Deck.h"
@@ -14,14 +15,15 @@
 
 enum pocketRate {HORRIBLE, BAD, QUESTIONABLE, OK, GOOD, GREAT};
 
+
 class Computer: public Player {
   public:
     Computer(int startingAmount);
-    Computer();
-    ~Computer(void);
+
     static int ratePocketCards(std::vector<Card> hand);
    
 };
+
 
 
 
