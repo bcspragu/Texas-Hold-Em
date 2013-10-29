@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Card.h"
+#include "Move.h"
 
 class Dealer;
 
@@ -11,8 +12,9 @@ class Player {
     Player(int startingAmount);
     std::vector<Card> hand;
     int wallet;
-    string getMove(Dealer* d);
+    Move getMove(Dealer* d);
     int getAmountForMove(Dealer* d);
+    Move moveFromString(string moveStr);
 };
 
 #endif

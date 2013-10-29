@@ -11,7 +11,7 @@ User::User(int startingAmount) : Player(startingAmount){
 }
 
 // have the user enter their move, store it for later
-string User::getMove(Dealer* d){
+Move User::getMove(Dealer* d){
   // call out to display class to display options to user
 
   // display class will return button pressed
@@ -21,7 +21,7 @@ string User::getMove(Dealer* d){
   cout << "Your choice: ";
   cin >> choice;
   lastMove = choice;
-  return choice;
+  return moveFromString(choice);
 }
 
 // have the user enter the amount to raise
@@ -31,3 +31,4 @@ int User::getAmountForMove(Dealer* d){
   cin >> amount;
   return amount;
 }
+

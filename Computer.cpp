@@ -75,7 +75,7 @@ Computer::Computer(int startingAmount) : Player(startingAmount) {
   }
  }
 
-string Computer::getMove(Dealer* d){
+Move Computer::getMove(Dealer* d){
   double pocketValue1;
   int handValue;
   int decision;
@@ -97,21 +97,21 @@ string Computer::getMove(Dealer* d){
   if((decision == 0) || (decision == 3)){
     raiseAmount = 0;
     move = 0;
-    return "Call";
+    return CALL;
   }else if (decision == 1){
     move = 1;
     raiseAmount = getFirstRaiseAmount(pocketValue1);
-    return "Raise";
+    return RAISE;
   }else if (decision == 4){
     move = 1;
     raiseAmount = getFirstRaiseAmount(handValue);
-    return "Raise";
+    return RAISE;
   }else if ((decision == 2) || (decision == 5)){
     move = 2;
     alreadyFolded == true;
-    return "Fold";
+    return FOLD;
   }
-  return "Call";
+  return CALL;
 }
 
 int Computer::getAmountForMove(Dealer* d){

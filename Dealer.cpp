@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "User.h"
 #include "Computer.h"
+#include "Move.h"
 
 using std::cout;
 using std::cin;
@@ -34,17 +35,19 @@ Dealer::Dealer(){
     std::vector<Player>::iterator pitr;
     //Deal two cards to each player
     for(pitr = currentRound.begin(); pitr != currentRound.end(); ++pitr){
-      string move = pitr->getMove(this);
+      Move move = pitr->getMove(this);
       //string move;
-      if(move == "bet" || move == "raise"){
+      if(move == RAISE){
         int amount;
         //int amount = pitr->getAmountForMove(this);
         if(amount < user.wallet){
           (*pitr).wallet -= amount;
           pot += amount;
         }
-      }else if(move == "fold"){
+      }else if(move == FOLD){
         currentRound.erase(pitr);
+      }else if(move == CALL){
+        // do call-tastic shit
       }    
     }
 
