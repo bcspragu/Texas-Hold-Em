@@ -18,23 +18,46 @@ void testHand(std::vector<Card> hand);
 
 int main(){
   Dealer d;
-  testHands();
-  std::vector<Card> pocket;
-  pocket.push_back(Card("2H"));
-  pocket.push_back(Card("4S"));
-  cout<< "Your pocket rate is: " << Computer::ratePocketCards(pocket) << endl;
+  //testHands();
+
+  
+  //Computer *computer1 = new Computer[500, startHand];
+
+  //std::vector<Card> pocket;
+ 
+  //cout<< "Your pocket rate is: " << Computer::ratePocketCards(pocket) << endl;
   
 
 }
 
 Dealer::Dealer(){
   deck.shuffle();
+
+  //std::vector<Card> startHand;
+  
   for(int i = 0; i < 5; i++){
     computers.push_back(Computer(500));
   }
   User user = User(500);
   std::vector<Computer>::iterator pitr;
+
+  computers[0].hand.push_back(Card("2S"));
+  computers[0].hand.push_back(Card("7H"));
+  //computers[0].myHand.push_back(Card("10S"));
+  //computers[0].myHand.push_back(Card("6S"));
+  //computers[0].myHand.push_back(Card("2S"));
+  //computers.front().myHand.push_back(Card("KS"));
+
+  //computers[0].raiseAmount=13;
+
+  //computers[0] = Computer::getMove(computers[0]);
+  string thisMove = computers[0].getMove(this);
+  //cout<< "raise amount: " << raise << endl;
+  cout << "Decision: " << computers[0].move << endl;
+  cout<< "Raise Amount: " << computers[0].raiseAmount << endl;
+
   //Deal two cards to each player
+  /*
   for(int i = 0; i < 2; i++){
     user.hand.push_back(deck.dealCard());
     for(pitr = computers.begin(); pitr != computers.end(); ++pitr){
@@ -43,7 +66,7 @@ Dealer::Dealer(){
   }
   user.getMove(this);
   user.getAmountForMove(this);
-  
+  /*
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
     string choice;
@@ -71,7 +94,7 @@ Dealer::Dealer(){
     //Take everyone's input
     
   }
-  
+  */
 
 }
 
