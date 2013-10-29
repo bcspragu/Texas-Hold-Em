@@ -8,6 +8,7 @@ class Dealer;
 
 class Player {
   public:
+    Player(int startingAmount);
     std::vector<Card> hand;
     int wallet;
     string getMove(Dealer* d);
