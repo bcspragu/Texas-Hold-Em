@@ -13,6 +13,7 @@ using std::endl;
 
 int main(){
   Dealer d;
+
 }
 
 Dealer::Dealer(){
@@ -27,13 +28,14 @@ Dealer::Dealer(){
   std::vector<Player> currentRound(players);
   std::vector<Player>::iterator pitr;
 
+  
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
     std::vector<Player>::iterator pitr;
     //Deal two cards to each player
     for(pitr = currentRound.begin(); pitr != currentRound.end(); ++pitr){
-      //string move = pitr->getMove(this);
-      string move;
+      string move = pitr->getMove(this);
+      //string move;
       if(move == "bet" || move == "raise"){
         int amount;
         //int amount = pitr->getAmountForMove(this);
@@ -54,6 +56,8 @@ Dealer::Dealer(){
     //Take everyone's input
 
   }
+  
+
 }
 
 Dealer::~Dealer(void){}

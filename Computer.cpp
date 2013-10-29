@@ -13,7 +13,7 @@ using std::endl;
 
 
 
-Computer::Computer(int startingAmount){
+Computer::Computer(int startingAmount) : Player(startingAmount) {
    wallet = startingAmount;
    //std::vector<Card> myHand;
    raiseAmount;
@@ -75,7 +75,7 @@ Computer::Computer(int startingAmount){
   }
  }
 
-  string Computer::getMove(Dealer* d){
+string Computer::getMove(Dealer* d){
   double pocketValue1;
   int handValue;
   int decision;
@@ -112,6 +112,10 @@ Computer::Computer(int startingAmount){
     return "Fold";
   }
   return "Call";
+}
+
+int Computer::getAmountForMove(Dealer* d){
+  return 10000;
 }
 
 int Computer::ratePocketCards(std::vector<Card> pocket){
