@@ -22,6 +22,8 @@ Move Player::moveFromString(string moveStr){
     return CALL;
   }else if((moveStr == "Raise") || (moveStr == "RAISE") || (moveStr == "raise")){
     return RAISE;
+  }else if((moveStr == "Allin") || (moveStr == "ALLIN") || (moveStr == "allin")){
+    return ALLIN;
   }else{
     assert(false); // not a valid 
   }
