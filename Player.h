@@ -12,8 +12,8 @@ class Player {
     Player(int startingAmount);
     std::vector<Card> hand;
     int wallet;
-    Move getMove(Dealer* d);
-    int getAmountForMove(Dealer* d);
+    virtual Move getMove(Dealer* d);
+    virtual int getAmountForMove(Dealer* d);
     Move moveFromString(string moveStr);
 };
 

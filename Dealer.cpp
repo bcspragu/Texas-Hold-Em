@@ -20,34 +20,34 @@ int main(){
 Dealer::Dealer(){
   deck.shuffle();
   User user = User(500);
-  players.push_back(user);
-  for(int i = 0; i < 5; i++){
-    players.push_back(Computer(500));
+  players[0] = &user;
+  for(int i = 1; i < numPlayers+1; i++){
+    players[i] = new Computer(500);
   }
 
+  for(int i = 0; i < 2; i++){
+    for(int i = 0; i < numPlayers; i++){
+      players[i]->hand.push_back(deck.dealCard());
+    }
+  }
   //Stores who hasn't folded/run out of money
-  std::vector<Player> currentRound(players);
-  std::vector<Player>::iterator pitr;
-
-  
-  while(userStillAlive()){
+  smallBlindHolderIndex = 0;
+  while(userStillAlive(user)){
+    betValue = largeBlind;
+    smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
     //Show everyone their cards, take everyones input
-    std::vector<Player>::iterator pitr;
     //Deal two cards to each player
-    for(pitr = currentRound.begin(); pitr != currentRound.end(); ++pitr){
-      Move move = pitr->getMove(this);
+    for(int i = 0; i < numPlayers; i++){
+      Move move = players[i]->getMove(this);
       //string move;
       if(move == RAISE){
-        int amount;
-        //int amount = pitr->getAmountForMove(this);
-        if(amount < user.wallet){
-          (*pitr).wallet -= amount;
+        int amount = players[i]->getAmountForMove(this);
+        if(amount < user.wallet && amount >= betValue){
+          players[i]->wallet -= amount;
           pot += amount;
         }
-      }else if(move == FOLD){
-        currentRound.erase(pitr);
-      }else if(move == CALL){
-        // do call-tastic shit
+      }else if(move == FOLD && players[i] != &user){
+
       }    
     }
 
@@ -65,9 +65,9 @@ Dealer::Dealer(){
 
 Dealer::~Dealer(void){}
 
-bool Dealer::userStillAlive(){
+bool Dealer::userStillAlive(User user){
   //First player is user, smallBlind*2 is large blind
-  return players.front().wallet > smallBlind*2;
+  return user.wallet > smallBlind*2;
 }
 //A royal flush is just a straight flush from 10-ACE
 bool Dealer::royalFlush(std::vector<Card> hand){
@@ -76,8 +76,7 @@ bool Dealer::royalFlush(std::vector<Card> hand){
 
 //A straight flush is just a straight and a flush
 bool Dealer::straightFlush(std::vector<Card> hand){
-  return straight(hand) && flush(hand);
-}
+  return straight(hand) && flush(hand); }
 
 bool Dealer::fourOfAKind(std::vector<Card> hand){
   //Map from Card value to the number of those cards you have

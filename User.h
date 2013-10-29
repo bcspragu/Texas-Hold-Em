@@ -7,8 +7,8 @@ class User: public Player {
   public:
     string lastMove;
     User(int startingAmount);
-    virtual Move getMove(Dealer* d);
-    virtual int getAmountForMove(Dealer* d);
+    Move getMove(Dealer* d);
+    int getAmountForMove(Dealer* d);
 };
 
 #endif

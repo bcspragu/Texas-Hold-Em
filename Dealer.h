@@ -11,6 +11,8 @@ class Card;
 class Computer;
 
 const int smallBlind = 100;
+const int largeBlind = 100;
+const int numPlayers = 6;
 
 class Dealer {
   public:
@@ -19,11 +21,11 @@ class Dealer {
     Deck deck;
     std::vector<Card> community;
     int pot;
-    int test;
-    Player* currentPlayer;
-    Player* smallBlindHolder;
+    int betValue;
+
+    int smallBlindHolderIndex;
     Player* determineWinner();
-    std::vector<Player> players;
+    Player* players[numPlayers];
     void dealHands();
     void dealFlop();
     void dealRiver();
@@ -32,7 +34,7 @@ class Dealer {
     void startGame();
     void endGame();
     void restartGame();
-    bool userStillAlive();
+    bool userStillAlive(User user);
     static bool royalFlush(std::vector<Card> hand);
     static bool straightFlush(std::vector<Card> hand);
     static bool fourOfAKind(std::vector<Card> hand);
@@ -49,6 +51,7 @@ class Dealer {
     static Value valueOfPair(std::vector<Card> hand);
     static Value highestValue(std::vector<Card> hand);
     static int scoreHand(std::vector<Card> hand);
+    Player* nextPlayer(std::vector<Computer> computers, User* user);
 };
 
 #endif
