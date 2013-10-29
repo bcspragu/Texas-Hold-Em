@@ -42,7 +42,9 @@ Dealer::Dealer(){
       (*pitr).hand.push_back(deck.dealCard());
     }
   }
-
+  user.getMove(this);
+  user.getAmountForMove(this);
+  /*
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
     string choice;
@@ -70,6 +72,7 @@ Dealer::Dealer(){
     //Take everyone's input
     
   }
+  */
 }
 
 Dealer::~Dealer(void){}
