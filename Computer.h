@@ -16,6 +16,8 @@ class Computer: public Player {
   public:
     Computer(int startingAmount);
     static int ratePocketCards(std::vector<Card> hand);
+    string getMove(Dealer* d);
+    int getAmountForMove(Dealer* d);
 };
 
 

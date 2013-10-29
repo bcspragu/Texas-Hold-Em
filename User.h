@@ -3,8 +3,6 @@
 
 #include "Player.h"
 
-class Dealer; // doesn't compile without this
-
 class User: public Player {
   public:
     string lastMove;

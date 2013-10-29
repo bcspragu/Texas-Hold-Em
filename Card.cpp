@@ -1,5 +1,4 @@
 #include <string>
-#include "SuitValue.h"
 #include "Card.h"
 
 using std::string;

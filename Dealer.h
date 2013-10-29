@@ -2,14 +2,15 @@
 #define DEALER_H
 
 #include <vector>
-#include "Card.h"
+#include "SuitValue.h"
 #include "Deck.h"
-#include "Player.h"
-#include "User.h"
-#include "Computer.h"
+
+class Player;
+class User;
+class Card;
+class Computer;
 
 const int smallBlind = 100;
-
 
 class Dealer {
   public:
@@ -22,7 +23,7 @@ class Dealer {
     Player* currentPlayer;
     Player* smallBlindHolder;
     Player* determineWinner();
-    std::vector<Computer> computers;
+    std::vector<Player> players;
     void dealHands();
     void dealFlop();
     void dealRiver();

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "User.h"
-#include "Dealer.h"
+#include "Deck.h"
 
 using std::cout;
 using std::cin;
@@ -24,8 +24,8 @@ string User::getMove(Dealer* d){
 
 // have the user enter the amount to bet/raise
 int User::getAmountForMove(Dealer* d){
-  string amount;
+  int amount;
   cout << lastMove << " amount: ";
   cin >> amount;
-  return atoi(amount.c_str());
+  return amount;
 }
