@@ -20,9 +20,8 @@ int main(){
   Dealer d;
   testHands();
   std::vector<Card> pocket;
-  pocket.push_back(Card("7H"));
-  pocket.push_back(Card("3C"));
-  
+  pocket.push_back(Card("2H"));
+  pocket.push_back(Card("4S"));
   cout<< "Your pocket rate is: " << Computer::ratePocketCards(pocket) << endl;
   
 
@@ -44,7 +43,7 @@ Dealer::Dealer(){
   }
   user.getMove(this);
   user.getAmountForMove(this);
-  /*
+  
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
     string choice;
@@ -72,7 +71,8 @@ Dealer::Dealer(){
     //Take everyone's input
     
   }
-  */
+  
+
 }
 
 Dealer::~Dealer(void){}

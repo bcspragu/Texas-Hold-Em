@@ -42,14 +42,6 @@ std::sort(hand.begin(),hand.end());
 
   Card lowCard = hand.front();
   Card highCard = hand.back();
-
-  //if(firstCard.value>=secondCard.value){
-    //highCard = firstCard;
-    //lowCard = secondCard;
-  //}else{
-   // highCard = secondCard;
-    //lowCard = firstCard;
-  //}
   
   std::map<Value, double> cardPoints; 
 
@@ -69,9 +61,22 @@ std::sort(hand.begin(),hand.end());
 
   handValue = cardPoints[highCard.value];
 
-  if((highCard.suit)==(lowCard.suit)){
-      handValue = handValue + 2;
+  if((highCard.value)==(lowCard.value)){
+      if((highCard.value)<=2){
+        handValue=5;
+      }else{
+        handValue = handValue*2;
+      }
+  }
+  if((highCard.suit) == (lowCard.suit)){
+    handValue = handValue + 2;
     }
+  if(((highCard.value) == (lowCard.value)+1) || ((highCard.value) == ((lowCard.value)-1))){
+    handValue = handValue + 1;
+  }
+  if(((highCard.value) == (lowCard.value)+2) || ((highCard.value) == ((lowCard.value)-2))){
+    handValue = handValue - 1;
+  }
 
 
     
@@ -87,7 +92,7 @@ std::sort(hand.begin(),hand.end());
 
   cout<<great<<" "<<good<< " "<<ok<<" "<<questionable<<" "<<bad<<endl;
   cout<<highCard.value<<endl;
-
+  cout<< "Pocket Rateeee: " << handValue << endl;
   if(great==2){
     return 100;
   }else{
