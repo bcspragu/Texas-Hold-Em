@@ -19,6 +19,13 @@ void testHand(std::vector<Card> hand);
 int main(){
   Dealer d;
   testHands();
+  std::vector<Card> pocket;
+  pocket.push_back(Card("7H"));
+  pocket.push_back(Card("3C"));
+  
+  cout<< "Your pocket rate is: " << Computer::ratePocketCards(pocket) << endl;
+  
+
 }
 
 Dealer::Dealer(){
@@ -52,6 +59,7 @@ Dealer::Dealer(){
       }else{
         cout << "You don't have that much money" << endl;
       }
+   
     }    
 
     //Deal three cards

@@ -22,36 +22,72 @@ Computer::Computer(int startingAmount){
   int bad=0;
   int horrible=0;
   int counter=0;
-  int value1=0;
-  int value2=0;
-  int suit1=0;
-  int suit2=0;
+  
+  double handValue;
 
-  std::vector<Card>::iterator pckitr;
-   
-   for(pckitr = hand.begin(); pckitr != hand.end(); ++pckitr){
-    if(counter==0){
-      value1= (*pckitr).value;
-      suit1=(*pckitr).suit;
-      counter++;
-    }else if(counter==1){
-      value2=(*pckitr).value;
-      suit2=(*pckitr).suit;
-    }
-    }
-    cout<<value1<<endl;
-    cout<<value2<<endl;
-    cout<<suit1<<endl;
-    cout<<suit2<<endl;
+/*Ace = 10 points
+King = 8 points
+Queen = 7 points
+Jack = 6 points
+10 through 2 = half of face value (i.e. 10 = 5, 9 = 4.5)
+Pairs, multiply score by 2 (i.e. KK = 16), minimum score for a pair is 5 (so pairs of 2 through 4 get a 5 score)
+Suited cards, add two points to highest card score
+Connectors add 1 point (i.e. KQ)
+One gap, subtract 1 point (i.e. T8)
+Two gap, subtract 2 points (i.e. AJ)
+Three gap, subtract 4 points (i.e. J7)
+Four or more gap, subtract 5 points (i.e. A4)
+*/
+std::sort(hand.begin(),hand.end());
 
+  Card lowCard = hand.front();
+  Card highCard = hand.back();
+
+  //if(firstCard.value>=secondCard.value){
+    //highCard = firstCard;
+    //lowCard = secondCard;
+  //}else{
+   // highCard = secondCard;
+    //lowCard = firstCard;
+  //}
+  
+  std::map<Value, double> cardPoints; 
+
+  cardPoints[ACE]=10;
+  cardPoints[KING]=8;
+  cardPoints[QUEEN]=7;
+  cardPoints[JACK]=6;
+  cardPoints[TEN]=5;
+  cardPoints[NINE]=4.5;
+  cardPoints[EIGHT]=4;
+  cardPoints[SEVEN]=3.5;
+  cardPoints[SIX]=3;
+  cardPoints[FIVE]=2.5;
+  cardPoints[FOUR]=2;
+  cardPoints[THREE]=1.5;
+  cardPoints[TWO]=1;
+
+  handValue = cardPoints[highCard.value];
+
+  if((highCard.suit)==(lowCard.suit)){
+      handValue = handValue + 2;
+    }
+
+
+    
+
+    
     //if((*pckitr).value>=8){
     //  great=great+1;
     //}else{
     //  bad=bad+1;
     //}
   //}
+
+
   cout<<great<<" "<<good<< " "<<ok<<" "<<questionable<<" "<<bad<<endl;
-  
+  cout<<highCard.value<<endl;
+
   if(great==2){
     return 100;
   }else{
