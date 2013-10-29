@@ -6,11 +6,9 @@ Player::Player(int startingAmount){
 }
 
 string Player::getMove(Dealer* d){
-  printf("getMove called on base Player class\n");
   assert(false);
 };
 
 int Player::getAmountForMove(Dealer* d){
-  printf("getMove called on base Player class\n");
   assert(false);
 };
