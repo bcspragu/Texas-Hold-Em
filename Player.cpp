@@ -1,10 +1,16 @@
 #include "Player.h"
+#include <assert.h>
 
 Player::Player(int startingAmount){
   wallet = startingAmount;
 }
 
-string getMove(Dealer* d){
+string Player::getMove(Dealer* d){
+  printf("getMove called on base Player class\n");
+  assert(false);
 };
-int getAmountForMove(Dealer* d){
+
+int Player::getAmountForMove(Dealer* d){
+  printf("getMove called on base Player class\n");
+  assert(false);
 };

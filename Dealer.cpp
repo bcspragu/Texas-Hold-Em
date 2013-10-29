@@ -13,6 +13,7 @@ using std::endl;
 
 int main(){
   Dealer d;
+
 }
 
 Dealer::Dealer(){
@@ -27,6 +28,7 @@ Dealer::Dealer(){
   std::vector<Player> currentRound(players);
   std::vector<Player>::iterator pitr;
 
+  
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
     std::vector<Player>::iterator pitr;
@@ -54,6 +56,8 @@ Dealer::Dealer(){
     //Take everyone's input
 
   }
+  
+
 }
 
 Dealer::~Dealer(void){}
