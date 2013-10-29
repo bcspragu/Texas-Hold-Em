@@ -22,16 +22,10 @@ Dealer::Dealer(){
   for(int i = 0; i < 5; i++){
     players.push_back(Computer(500));
   }
+
   //Stores who hasn't folded/run out of money
   std::vector<Player> currentRound(players);
   std::vector<Player>::iterator pitr;
-  //Deal two cards to each player
-  for(int i = 0; i < 2; i++){
-    user.hand.push_back(deck.dealCard());
-    for(pitr = players.begin(); pitr != players.end(); ++pitr){
-      (*pitr).hand.push_back(deck.dealCard());
-    }
-  }
 
   while(userStillAlive()){
     //Show everyone their cards, take everyones input
@@ -50,7 +44,6 @@ Dealer::Dealer(){
       }else if(move == "fold"){
         currentRound.erase(pitr);
       }    
-
     }
 
     //Deal three cards
@@ -61,8 +54,6 @@ Dealer::Dealer(){
     //Take everyone's input
 
   }
-
-
 }
 
 Dealer::~Dealer(void){}
