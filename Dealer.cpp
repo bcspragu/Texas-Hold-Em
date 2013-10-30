@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <stdio.h>
 #include <vector>
 #include <map>
 #include <cstring>
@@ -14,6 +15,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+//string playersString(std::vector<Player*> ps);
+
 Dealer::Dealer(){
   numPlayers = 6;
   User* user = new User(500);
@@ -26,11 +29,9 @@ Dealer::Dealer(){
 
   std::vector<Player*>::iterator pitr;
 
-
-  int pointerOffset = 0;
-  smallBlindHolderIndex = 0;
+  smallBlindLoc = -1;
   //Game loop
-  while(userStillAlive(*user)){
+  while((*players.front()).wallet > largeBlind){
     //Fill and shuffle the deck before each hand
     deck.fill();
     deck.shuffle();
@@ -70,29 +71,42 @@ Dealer::Dealer(){
     pot = 0;
 
     do{
-      smallBlindHolderIndex = (smallBlindHolderIndex + 1) % players.size();
+      smallBlindLoc = (smallBlindLoc + 1) % players.size();
     }
-    while(players[smallBlindHolderIndex] == NULL);
-
-    players[smallBlindHolderIndex]->wallet -= smallBlind;
-    players[(smallBlindHolderIndex+1) % players.size()]->wallet -= largeBlind;
-    pot += smallBlind+largeBlind;
-
+    while(players[smallBlindLoc] == NULL);
     currentRound = players;
+    players[smallBlindLoc]->wallet -= smallBlind;
+    cout << "Player " << players[smallBlindLoc]->ID << " has small blind" << endl;
+    players[(smallBlindLoc+1) % players.size()]->wallet -= largeBlind;
+    cout << "Player " << players[(smallBlindLoc+1) % players.size()]->ID << " has large blind" << endl;
+    pot += smallBlind+largeBlind;
 
     roundOfBetting(2);
 
-    dealFlop();
+    if(playersStillIn(currentRound) != 1){
+      dealFlop();
+    }
 
-    roundOfBetting(0);
+    if(playersStillIn(currentRound) != 1){
+      roundOfBetting(0);
+    }
 
-    dealTurn();
+    if(playersStillIn(currentRound) != 1){
+      dealTurn();
+    }
 
-    roundOfBetting(0);
+    if(playersStillIn(currentRound) != 1){
+      roundOfBetting(0);
+    }
 
-    dealRiver();
+    if(playersStillIn(currentRound) != 1){
+      dealRiver();
+    }
 
-    roundOfBetting(0);
+    if(playersStillIn(currentRound) != 1){
+      roundOfBetting(0);
+    }
+
     std::vector<Player*> winners = determineWinner();
     for(pitr = winners.begin(); pitr != winners.end(); ++pitr){
       if((*pitr) != NULL){
@@ -126,7 +140,9 @@ void Dealer::dealRiver(){
 }
 
 void Dealer::roundOfBetting(int handOffset){
-  cout << "Player " << smallBlindHolderIndex+handOffset+1 << " bets first." << endl;
+  if(playersStillIn(currentRound) == 1){
+    return; //There's only one person, we don't need to play
+  }
   //All set if nobody has raised, means everyone has folded or checked
   bool allSet = false;
   int playerPos;
@@ -135,51 +151,62 @@ void Dealer::roundOfBetting(int handOffset){
   for(pitr = players.begin(); pitr != players.end(); ++pitr){
     if((*pitr) != NULL){
       (**pitr).currentContribution = 0;
+      (**pitr).allIn = false;
     }
   }
   while(!allSet){
     cout << "Pot: $" << pot << " Bet: $" << betValue << endl;
     allSet = true;
-    for(int i = ((smallBlindHolderIndex + handOffset) % currentRound.size());
-        i != ((smallBlindHolderIndex+handOffset-1) % currentRound.size());
-        i = ((i + 1) % currentRound.size())){
-      if(currentRound[i] != NULL){
-        Player* player = currentRound[i];
-        Move move = player->getMove(this);
-        if(move == RAISE){
-          //The amount they spend is the amount they need to add to match the current bet, plus their raise
-          int raise = player->getAmountForMove(this);
-          int amount = (betValue - player->currentContribution) + raise;
-          if(amount <= player->wallet){ //If they have enough money to do this
-            betValue += raise;
-            player->wallet -= amount;
-            pot += amount;
-          }
-          allSet = false;
-        }else if(move == CALL){
-          int amount = betValue - player->currentContribution;
-          if(amount < player->wallet){
-            player->wallet -= amount;
-            pot += amount;
-          }
-        }else if(move == FOLD){
-          currentRound[i] == NULL;
-        }else if(move == ALLIN){
-          int amount = player->wallet;
-          
-        }else{
-          assert(false);
-        }
+    for(int i = 0; i < currentRound.size(); i++){
+      int index = (smallBlindLoc+handOffset+i) % currentRound.size();
+      if(currentRound[index] != NULL){
+        Player* player = currentRound[index];
+        if(!(player->allIn)){
+          Move move = player->getMove(this);
+          if(move == RAISE){
+            //The amount they spend is the amount they need to add to match the current bet, plus their raise
+            int raise = player->getAmountForMove(this);
+            int amount = (betValue - player->currentContribution) + raise;
+            if(amount <= player->wallet){ //If they have enough money to do this
+              betValue += raise;
+              player->currentContribution += amount;
+              player->wallet -= amount;
+              pot += amount;
+            }else{
 
+            }
+            allSet = false;
+          }else if(move == CALL){
+            int amount = betValue - player->currentContribution;
+            if(amount < player->wallet){
+              player->currentContribution += amount;
+              player->wallet -= amount;
+              pot += amount;
+            }
+          }else if(move == FOLD){
+            currentRound[index] = NULL;
+            if(playersStillIn(currentRound) == 1){
+              return; //There's only one person, we don't need to play
+            }
+          }else if(move == ALLIN){
+            int amount = player->wallet;
+            player->currentContribution += amount;
+            if(player->currentContribution > betValue){ //Effectively a raise
+              allSet = false;
+            }
+            player->wallet = 0;
+            betValue += amount;
+          }else{
+            assert(false);
+          }
+        }
       }
     }
   }
+  //cout << "Still in round: " << playersString(currentRound) << endl;
+  //cout << "Still in hand: " << playersString(players) << endl;
 }
 
-bool Dealer::userStillAlive(User user){
-  //First player is user, smallBlind*2 is large blind
-  return user.wallet > smallBlind*2;
-}
 //A royal flush is just a straight flush from 10-ACE
 bool Dealer::royalFlush(std::vector<Card> hand){
   return straightFlush(hand) && highestValue(hand) == ACE;
@@ -622,4 +649,15 @@ std::vector<Card> Dealer::fiveCardHand(std::vector<Card> largeHand, int i1, int 
     }
   }
   return newHand;
+}
+
+int Dealer::playersStillIn(std::vector<Player*> current){
+  int count = 0;
+  std::vector<Player*>::iterator itr;
+  for(itr = current.begin(); itr != current.end(); ++itr){
+    if(*itr != NULL){
+      count++;
+    }
+  }
+  return count;
 }

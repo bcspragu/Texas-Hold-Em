@@ -20,7 +20,7 @@ class Dealer {
     std::vector<Card> community;
     int pot;
     int betValue;
-    int smallBlindHolderIndex;
+    int smallBlindLoc;
     int numPlayers;
     std::vector<Player*> determineWinner();
     std::vector<Player*> players;
@@ -56,6 +56,7 @@ class Dealer {
   private:
     std::vector<Card> fiveCardHand(std::vector<Card> sevenCardHand, int index1, int index2);
     void roundOfBetting(int offset);
+    int playersStillIn(std::vector<Player*> current);
 };
 
 #endif

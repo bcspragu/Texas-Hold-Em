@@ -14,6 +14,7 @@ class Player {
     int wallet;
     int ID;
     int currentContribution;
+    bool allIn;
     virtual Move getMove(Dealer* d);
     virtual int getAmountForMove(Dealer* d);
     Move moveFromString(string moveStr);
