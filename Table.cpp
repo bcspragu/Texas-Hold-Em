@@ -9,8 +9,17 @@
 using namespace std;
 
 void Table::drawBoard(Dealer* d){
+	// using a stringstream rather than a string to make making the banner easier
+	stringstream messageString;
 
-	display gameDisplay;
+	// various variable declarations
+	char key;
+	char key2;
+	int cardX = 0;
+	int cardY = 0;
+	//int suit = 0;
+	//int number = 0;
+
 
 	// Player 1
 	gameDisplay.drawBox(47, 6, 13, 3, 0);		// Money
@@ -88,6 +97,208 @@ void Table::drawBoard(Dealer* d){
 	mvprintw(30,94,"Fold");
 	gameDisplay.drawBox(87, 35, 19, 6, 0);		// Bottom Right
 	mvprintw(37,94,"Quit");
+
+	int keynew = 0;
+	int bet = 0;
+	bool isTurn = true;
+
+	// infinite loop for the main program, you can press ctrl-c to quit
+	for (;;) {
+		// Refresh every textbox
+		// Money per player
+		// Pot Money
+		// Side Pot Money
+		// CPU actions
+		
+		if (isTurn){
+			// calls the game display to capture some input
+	    	key = gameDisplay.captureInput();
+    		keynew = key - 48;
+			// if a mouse event occurred
+			if (key == -1) {
+				// make a banner message
+				messageString.str("");
+				messageString << "A mouse event occurred x=" \
+					<< gameDisplay.getMouseEventX() << ", y=" \
+					<< gameDisplay.getMouseEventY() << ", bstate=" \
+					<< gameDisplay.getMouseEventButton();
+				// display a banner message
+				gameDisplay.bannerTop(messageString.str());
+				// record the location of the mouse event
+				cardX = gameDisplay.getMouseEventX();
+				cardY = gameDisplay.getMouseEventY();
+				// Some of the mouse click values are defined in display.h
+				
+
+
+
+
+
+
+				// check if it was a left click
+				if (gameDisplay.getMouseEventButton()&LEFT_CLICK) {
+
+
+					// Top Left
+					// Check/Call
+					if((cardX >= 50) && (cardX <= 68) && (cardY >= 28) && (cardY <= 33)){
+						gameDisplay.drawBox(35, 35, 13, 3, 0);		// Last action
+						mvprintw(36,36,"Check/Call");
+						messageString.str("");
+						messageString << "You Checked/Called";
+						gameDisplay.bannerBottom(messageString.str());
+					}
+
+					// Bottom Left
+					else if((cardX >= 50) && (cardX <= 68) && (cardY >= 35) && (cardY <= 40)){
+						mvprintw(37,55,"Cheater   ");
+						messageString.str("");
+						messageString << "You Cheated";
+						gameDisplay.bannerBottom(messageString.str());
+					}
+
+
+
+
+
+
+
+
+
+					// Top Middle
+					// Raise
+					else if((cardX >= 69) && (cardX <= 86) && (cardY >= 28) && (cardY <= 33)){
+						
+						for(;;){
+							key2 = gameDisplay.captureInput();
+							keynew = key2 - 48;
+
+							if ((keynew >= 0) && (keynew <= 9)){
+								bet = (bet * 10) + keynew;
+								messageString.str("");
+								messageString << "Press SPACE to confirm                           Money raising: " << bet;
+								gameDisplay.bannerBottom(messageString.str());
+							}
+
+							if (keynew == -16){
+								if (bet != 0){
+									gameDisplay.drawBox(35, 35, 13, 3, 0);		// Last action
+									mvprintw(36,36,"Raise");								
+									messageString.str("");
+									messageString << "You bet " << bet << " chip(s)";
+									gameDisplay.bannerBottom(messageString.str());
+									bet = 0;
+									break;
+								}
+							}
+						}
+					}
+
+
+
+
+
+
+
+
+
+					// Bottom Middle
+					// ALL IN
+					else if((cardX >= 69) && (cardX <= 86) && (cardY >= 35) && (cardY <= 40)){
+						gameDisplay.drawBox(35, 35, 13, 3, 0);		// Last action
+						mvprintw(36,36,"ALL IN");
+						messageString.str("");
+						messageString << "You went ALL IN!";
+						gameDisplay.bannerBottom(messageString.str());
+					}
+
+					// Top Right
+					// Fold
+					else if((cardX >= 87) && (cardX <= 105) && (cardY >= 28) && (cardY <= 33)){
+						gameDisplay.drawBox(35, 35, 13, 3, 0);		// Last action
+						mvprintw(36,36,"Fold");
+						messageString.str("");
+						messageString << "You Folded";
+						gameDisplay.bannerBottom(messageString.str());
+					}
+
+					// Bottom Right
+					// Quit
+					else if((cardX >= 87) && (cardX <= 105) && (cardY >= 35) && (cardY <= 40)){
+						break;
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+				/*
+				// Not needed
+				////////////////////////////////////////////////////////////
+				// check if it was a right click
+				else if (gameDisplay.getMouseEventButton()&RIGHT_CLICK) {
+					// erase a portion of the screen in the shape of a card
+					gameDisplay.eraseBox(cardX,cardY,6,5);
+				// check for the start of a drag click
+				} else if (gameDisplay.getMouseEventButton()&LEFT_DOWN) {
+					// record start of the drag
+					dragX = cardX;
+					dragY = cardY;
+				// when the mouse is released
+				} else if (gameDisplay.getMouseEventButton()&LEFT_UP) {
+					// calculate size of the drag
+					int sizeX = abs(dragX-cardX);
+					int sizeY = abs(dragY-cardY);
+					// get to the top left corner of the drag area
+					if (dragX > cardX)
+						dragX = cardX;
+	                if (dragY > cardY)
+	                    dragY = cardY;
+					// draw a box around the drag area
+					gameDisplay.drawBox(dragX, dragY, sizeX, sizeY, 0);
+				}
+				////////////////////////////////////////////////////////////
+				*/
+
+			} 
+
+
+			/*
+			// Not needed
+			////////////////////////////////////////////////////////////
+			// if a key was pressed
+			else if(key > 0) {		
+				if ((key > 47) && (key < 58)){
+					gameDisplay.displayCard(55,10,rand()%5,1, A_BOLD);
+					bet = (bet * 10) + keynew;
+					messageString.str("");
+					messageString << "Money betting: " << bet;
+					gameDisplay.bannerBottom(messageString.str());
+					
+				}
+				else {
+					if (bet != 0){
+						messageString.str("");
+						messageString << "You bet " << bet << " chip(s)";
+						gameDisplay.bannerBottom(messageString.str());
+						bet = 0;					
+					}
+				}
+			}
+			////////////////////////////////////////////////////////////
+			*/
+
+
+
+
+		}
+	}
 
 }
 

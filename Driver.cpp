@@ -4,9 +4,9 @@
 int main(){
   Dealer d;
   Table t;
-  
+  t.drawBoard(&d);
   while(true){
-    t.drawBoard(&d);
+    
   }
   return 0;
 }

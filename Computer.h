@@ -8,7 +8,6 @@
 #include "Deck.h"
 #include "SuitValue.h"
 #include "Player.h"
-#include "Table.h"
 
 enum pocketRate {HORRIBLE, BAD, QUESTIONABLE, OK, GOOD, GREAT};
 
