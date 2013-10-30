@@ -9,12 +9,15 @@
 #include "User.h"
 #include "Computer.h"
 #include "Move.h"
+#include "Table.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
 
 Dealer::Dealer(){
+  Table t;
+  pot = 0;
   numPlayers = 6;
   User* user = new User(500);
   players.push_back(user);
@@ -28,7 +31,7 @@ Dealer::Dealer(){
   int pointerOffset = 0;
   smallBlindHolderIndex = 0;
   //Game loop
-  /*
+  
   while(userStillAlive(*user)){
     //Fill and shuffle the deck before each hand
     deck.fill();
@@ -41,11 +44,12 @@ Dealer::Dealer(){
         numPlayers--;
       }
     }
+    t.drawBoard(this);
 
     if(numPlayers == 1){
       //Game Over, you win
     }
-
+    
     //Clear out each user's hand, then deal them a new one
     for(pitr = players.begin(); pitr != players.end(); ++pitr){
       if((*pitr) != NULL){
@@ -62,6 +66,7 @@ Dealer::Dealer(){
     }
 
     //Resetting things between rounds
+
     betValue = largeBlind;
     pot = 0;
     smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
@@ -84,7 +89,7 @@ Dealer::Dealer(){
     roundOfBetting(0);
     determineWinner();
   }
-  */
+  
   cout << "User has left/lost the game." << endl;
 
 }
