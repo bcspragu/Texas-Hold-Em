@@ -29,11 +29,19 @@ Dealer::Dealer(){
     }
   }
 
+  int roundNum = 0;
   smallBlindHolderIndex = 0;
   //Game loop
   while(userStillAlive(*user)){
+    //Hand loop
     betValue = largeBlind;
     smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
+    roundOfBetting();
+    dealFlop();
+    roundOfBetting();
+    dealTurn();
+    roundOfBetting();
+    dealRiver();
     roundOfBetting();
     //Show everyone their cards, take everyones input
     //Deal two cards to each player
@@ -52,10 +60,34 @@ Dealer::Dealer(){
 
 }
 
+void Dealer::dealFlop(){
+  cout << "Dealing the flop." << endl;
+  for(int i = 0; i < 3; i++){
+    community.push_back(deck.dealCard());
+  }
+  cout << "Community cards: " << Deck::displayHand(community) << endl;
+}
+
+void Dealer::dealTurn(){
+  cout << "Dealing the turn." << endl;
+  community.push_back(deck.dealCard());
+  cout << "Community cards: " << Deck::displayHand(community) << endl;
+}
+
+void Dealer::dealRiver(){
+  cout << "Dealing the river." << endl;
+  community.push_back(deck.dealCard());
+  cout << "Community cards: " << Deck::displayHand(community) << endl;
+}
+
 void Dealer::roundOfBetting(){
+  cout << "Commence betting." << endl;
   //All set if nobody has raised, means everyone has folded or checked
   bool allSet;
   std::vector<Player*>::iterator pitr;
+  for(pitr = players.begin(); pitr != players.end(); ++pitr){
+    (**pitr).currentContribution = 0;
+  }
   while(!allSet){
     allSet = true;
     for(pitr = players.begin(); pitr != players.end(); ++pitr){

@@ -75,15 +75,13 @@ Move Computer::getMove(Dealer* d){
   int handValue;
   int decision;
 
-  cout<< "size of community: " << (*d).community.size()<<endl;
-
   std::vector<Card> allCards;
   allCards.insert(allCards.end(), hand.begin(), hand.end());
   allCards.insert(allCards.end(), (*d).community.begin(),(*d).community.end());
   
   std::vector<Card>::iterator pitr;
   for(pitr = allCards.begin(); pitr != allCards.end(); ++pitr){
-      cout<< "Card is:" <<(*pitr).value << (*pitr).suit << endl;
+      //cout<< "Card is:" <<(*pitr).value << (*pitr).suit << endl;
     }
 
 
@@ -101,7 +99,7 @@ Move Computer::getMove(Dealer* d){
     handValue = (*d).scoreBestHand(hand);
     decision = getDecision(handValue);
   }
-  cout<<"Hand Value: "<<handValue<<endl;
+  //cout<<"Hand Value: "<<handValue<<endl;
 
   //cout<<"temp decision: " << decision << endl;
 

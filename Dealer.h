@@ -32,7 +32,6 @@ class Dealer {
     void startGame();
     void endGame();
     void restartGame();
-    void roundOfBetting();
     bool userStillAlive(User user);
     static bool royalFlush(std::vector<Card> hand);
     static bool straightFlush(std::vector<Card> hand);
@@ -55,6 +54,7 @@ class Dealer {
     Player* nextPlayer(std::vector<Computer> computers, User* user);
   private:
     std::vector<Card> fiveCardHand(std::vector<Card> sevenCardHand, int index1, int index2);
+    void roundOfBetting();
 };
 
 #endif
