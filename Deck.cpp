@@ -5,14 +5,20 @@
 #include "SuitValue.h"
 
 Deck::Deck(){
+  fill();
+}
+
+Deck::~Deck(){}
+
+void Deck::fill(){
+  cards.clear();
   for(int i = 0; i < 52; i++){
     Suit s = Card::suitFromInt(i/13);
     Value v = Card::valueFromInt(i % 13);
     cards.push_back(Card(s,v));
   }
-}
 
-Deck::~Deck(){}
+}
 
 void Deck::shuffle(){
   std::srand(time(0));
