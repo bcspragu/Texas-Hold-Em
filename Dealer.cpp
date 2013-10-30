@@ -16,11 +16,10 @@ using std::endl;
 
 Dealer::Dealer(){
   deck.shuffle();
-  User user(500);
-  players.push_back(&user);
+  User* user = new User(500);
+  players.push_back(user);
   for(int i = 1; i < numPlayers+1; i++){
-    Computer computer(500);
-    players.push_back(&computer);
+    players.push_back(new Computer(500));
   }
 
   std::vector<Player*>::iterator pitr;
@@ -32,7 +31,7 @@ Dealer::Dealer(){
 
   smallBlindHolderIndex = 0;
   //Game loop
-  while(userStillAlive(user)){
+  while(userStillAlive(*user)){
     betValue = largeBlind;
     smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
     roundOfBetting();
