@@ -78,6 +78,9 @@ void Dealer::roundOfBetting(){
         }
       }else if(move == FOLD){
         //Kick them out of this round
+      }else if(move == ALLIN){
+        int amount = (**pitr).wallet;
+        
       }else{
         assert(false);
       }
@@ -302,7 +305,6 @@ Value Dealer::lowerPair(std::vector<Card> hand){
     cardCounts[(*itr).value]++;
   }
 
-  int numPairs = 0;
   Value lowestValue = ACE;
   //Iterate through the map and look for a count of 2
   std::map<Value,int>::iterator mitr;

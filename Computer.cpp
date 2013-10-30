@@ -35,7 +35,7 @@ int Computer::getDecision(int handValue){
     }
 
     if(handValue < 7){
-      if(random > 80){
+      if(random > 55){
         return 0;
       }else if((random > 0) && (random < 5)){
         return 1;
@@ -75,17 +75,33 @@ Move Computer::getMove(Dealer* d){
   int handValue;
   int decision;
 
+  cout<< "size of community: " << (*d).community.size()<<endl;
+
+  std::vector<Card> allCards;
+  allCards.insert(allCards.end(), hand.begin(), hand.end());
+  allCards.insert(allCards.end(), (*d).community.begin(),(*d).community.end());
+  
+  std::vector<Card>::iterator pitr;
+  for(pitr = allCards.begin(); pitr != allCards.end(); ++pitr){
+      cout<< "Card is:" <<(*pitr).value << (*pitr).suit << endl;
+    }
+
+
   //if only pocket cards use ratePocketCards method for decision
 
-  if((hand.size())<=2){    
-    handValue= ratePocketCards(hand);
-
+  if((allCards.size())<=2){    
+    handValue= ratePocketCards(allCards);
     decision = getDecision(pocketValue1);
-  }else{
-    handValue = Dealer::scoreHand(hand);
+
+  }else if ((allCards.size()) == 5){
+    handValue = Dealer::scoreHand(allCards);
     //cout << "Hand rank: " << handValue << endl;
     decision = getDecision(handValue);
+  }else if ((allCards.size()) >= 6){
+    handValue = (*d).scoreBestHand(hand);
+    decision = getDecision(handValue);
   }
+  cout<<"Hand Value: "<<handValue<<endl;
 
   //cout<<"temp decision: " << decision << endl;
 
@@ -114,7 +130,7 @@ int Computer::ratePocketCards(std::vector<Card> pocket){
   int pocketValue;
   std::sort(pocket.begin(),pocket.end());
 
-  cout<<pocket.size()<<endl;
+  
   Card lowCard = pocket.front();
   Card highCard = pocket.back();
 
