@@ -17,14 +17,15 @@ class Computer: public Player {
   public:
     Computer(int startingAmount);
     static int ratePocketCards(std::vector<Card> hand);
+
     Move getMove(Dealer* d);
-    int getAmountForMove(Dealer* d);
-    static int getFirstRaiseAmount(int handValue);
-    static int getRaiseAmount(int handValue);
+    int getAmountForMove(Dealer* d);    
+    int getRaiseAmount(Dealer* d);
     static int getDecision(int handValue);
     int raiseAmount;
     int move;
     bool alreadyFolded;
+    int handValue;
 };
 
 #endif
