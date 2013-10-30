@@ -10,7 +10,6 @@
 #include "User.h"
 #include "Computer.h"
 #include "Move.h"
-#include "Table.h"
 
 using std::cout;
 using std::cin;
@@ -19,7 +18,6 @@ using std::endl;
 //string playersString(std::vector<Player*> ps);
 
 Dealer::Dealer(){
-  Table t;
   pot = 0;
   numPlayers = 6;
   User* user = new User(500);
@@ -51,7 +49,6 @@ Dealer::Dealer(){
         numPlayers--;
       }
     }
-    t.drawBoard(this);
 
     if(numPlayers == 1){
       //Game Over, you win

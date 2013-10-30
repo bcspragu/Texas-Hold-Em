@@ -1,7 +1,6 @@
 #include <iostream>
 #include "User.h"
 #include "Deck.h"
-#include "Table.h"
 
 using std::cout;
 using std::cin;
@@ -14,15 +13,9 @@ User::User(int startingAmount) : Player(startingAmount){
 
 // have the user enter their move, store it for later
 Move User::getMove(Dealer* d){
-  Table t;
-  //t.drawBoard(d);
-  //cout << "pre getUserMove" << endl;
-  return t.getUserMove();
-  //cout << "post getUserMove" << endl;
-
   // display class will return button pressed
   // "raise", "call", "fold", "allin"
-  /*
+
   string choice;
   cout << "Your wallet: $" << wallet << endl;
   cout << "Your cards: " << Deck::displayHand(hand) << endl;
@@ -30,7 +23,6 @@ Move User::getMove(Dealer* d){
   cin >> choice;
   lastMove = choice;
   return moveFromString(choice);
-  */
 }
 
 // have the user enter the amount to raise
