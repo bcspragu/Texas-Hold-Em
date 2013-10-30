@@ -76,9 +76,9 @@ Move Computer::getMove(Dealer* d){
   int decision;
 
   //if only pocket cards use ratePocketCards method for decision
-  if((hand.size())<=2){
 
-    pocketValue1 = ratePocketCards(hand);
+  if((hand.size())<=2){    
+    handValue= ratePocketCards(hand);
 
     decision = getDecision(pocketValue1);
   }else{
@@ -93,13 +93,9 @@ Move Computer::getMove(Dealer* d){
     raiseAmount = 0;
     move = 0;
     return CALL;
-  }else if (decision == 1){
+  }else if ((decision == 1) || (decision == 4)){
     move = 1;
-    raiseAmount = getFirstRaiseAmount(pocketValue1);
-    return RAISE;
-  }else if (decision == 4){
-    move = 1;
-    raiseAmount = getFirstRaiseAmount(handValue);
+    raiseAmount = getRaiseAmount(d);
     return RAISE;
   }else if ((decision == 2) || (decision == 5)){
     move = 2;
@@ -110,7 +106,7 @@ Move Computer::getMove(Dealer* d){
 }
 
 int Computer::getAmountForMove(Dealer* d){
-  return 10000;
+  return raiseAmount;
 }
 
 int Computer::ratePocketCards(std::vector<Card> pocket){
@@ -172,36 +168,88 @@ int Computer::ratePocketCards(std::vector<Card> pocket){
   return pocketValue;
 
 }
-int Computer::getFirstRaiseAmount(int handValue){
-  //cout<<"here4"<<endl;
+
+int Computer::getRaiseAmount(Dealer *d){ 
+
   int random = (rand() % 100 + 1);
+  int pot = (*d).pot;
+  int currentBet= (*d).betValue;
+  int availableWallet = wallet - currentBet;
+
+  //raiseing for a good pocket hand
   if((handValue >= 15) && (handValue <= 20)){
-    if(random>=50){
-      //cout<<"here 2"<<endl;
-      return (100);
-    }else{
-      return (50);
-    }
 
+    if(random>=50){                                           // 50% chance of raising by 40% of the pot
+      if(((4*pot)/10) <= availableWallet){
+        return ((4*pot)/10);
+      }else{
+        return availableWallet;                               // if 40% of pot is more then available wallet, all-in
+      }
+    }else{
+      if(((2*pot)/10) <= availableWallet){                    // 50% chance of raising by 20% of the pot
+        return ((2*pot)/10);
+      }else{
+        return availableWallet;
+      }
+    }
   }else if (handValue < 15){
-    //cout<<"here 3"<< endl;
-    return (50);
-  }
-  else if (handValue > 50000){
-    if(random >= 50){
-      return (150);
-    }else{
-      return 100;
-    }
-  }else{
-    return 75;
-  }
-  return 45;
-}
 
-int Computer::getRaiseAmount(int handValue){
-  return 0;
+    if(((1*pot)/10) <= availableWallet){
+      return ((1*pot)/10);
+    }else{
+      return availableWallet;
+    }
+  }else if (handValue > 80000){
+
+    if(random >= 50){
+      return availableWallet;
+    }else if (((5*pot)/10) <= availableWallet){
+      return ((5*pot)/10);
+    }else{
+        return availableWallet;
+    }  
+  }else if ((handValue <=80000) && (handValue >40000)){
+    if (random >= 50){
+      if(((3*pot)/10) <= availableWallet){
+        return ((3*pot)/10);
+      }else{
+        return availableWallet;
+      }
+    }else if(random < 5){
+      return availableWallet;
+    }else{
+      if((pot/10) <= availableWallet){
+        return (pot/10);
+      }else{
+        return availableWallet;
+      }
+    }
+  }else if((handValue <= 40000) && (handValue >25)){
+    if(random >= 30){
+      if(((2*pot)/10) <= availableWallet){
+        return ((2*pot)/10);
+      }else{
+        return availableWallet;
+      }
+    }else if (random < 3){
+      return availableWallet;
+    }else{
+      if ((pot/10) <= availableWallet){
+        return (pot/10);
+      }else {
+        return availableWallet;
+      }
+    }
+
+  }
+  return ((availableWallet*2)/30);
+
 }
+  
+  
+//int Computer::getRaiseAmount(int handValue){
+//return 0;
+//}
 
 
 /*Ace = 10 points

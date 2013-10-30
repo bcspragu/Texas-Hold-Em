@@ -427,5 +427,5 @@ int Dealer::scoreHand(std::vector<Card> hand){
     tertiary = 0;
   }
   //Unique hand score, weighted by characteristic importance
-  return primary*10000+secondary*100+tertiary;
+  return primary*10000+secondary*100+tertiary + 30;
 }
