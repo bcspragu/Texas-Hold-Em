@@ -3,9 +3,10 @@
 
 #include "Move.h"
 #include "display.h"
+#include "Dealer.h"
+#include "Player.h"
 
 //class display;
-class Dealer;
 
 class Table {
   public:

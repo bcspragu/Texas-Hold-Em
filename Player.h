@@ -13,6 +13,7 @@ class Player {
     std::vector<Card> hand;
     int wallet;
     int currentContribution;
+    string lastMove;
     virtual Move getMove(Dealer* d);
     virtual int getAmountForMove(Dealer* d);
     Move moveFromString(string moveStr);

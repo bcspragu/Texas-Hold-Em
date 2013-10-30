@@ -3,6 +3,7 @@
 
 Player::Player(int startingAmount){
   wallet = startingAmount;
+  lastMove = "starting game";
 }
 
 Move Player::getMove(Dealer* d){

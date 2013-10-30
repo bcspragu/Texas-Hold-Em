@@ -8,6 +8,7 @@ using std::endl;
 
 User::User(int startingAmount) : Player(startingAmount){
   wallet = startingAmount;
+  lastMove = "starting game";
 }
 
 // have the user enter their move, store it for later

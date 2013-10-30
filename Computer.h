@@ -22,7 +22,6 @@ class Computer: public Player {
     int getRaiseAmount(Dealer* d);
     static int getDecision(int handValue);
     int raiseAmount;
-    int move;
     bool alreadyFolded;
     int handValue;
 };
