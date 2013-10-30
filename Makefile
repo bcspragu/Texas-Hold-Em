@@ -6,7 +6,7 @@ CFLAGS=-c -Wall $(DEBUG)
 LDFLAGS=-lncursesw $(DEBUG)
 SOURCES=display.cpp display.h Card.cpp Card.h Computer.cpp Computer.h Dealer.cpp Dealer.h Deck.cpp Deck.h Driver.cpp Move.h Player.cpp Player.h SuitValue.h Table.cpp Table.h User.cpp User.h
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=display
+EXECUTABLE=texas
 
 all: clean $(SOURCES) $(EXECUTABLE)
 
