@@ -266,13 +266,13 @@ void display::printSuit(int suit) {
             printw("%s",spades);
             break;
 		case 2:
-            printw("%s",hearts);
+            printw("%s",diamonds);
             break;
 		case 3:
-            printw("%s",clubs);
+            printw("%s",hearts);
             break;
 		case 4:
-            printw("%s",diamonds);
+            printw("%s",clubs);
             break;
 		default:
 			printw(" ");
@@ -297,7 +297,7 @@ void display::printNumber(int number) {
 		case 10:
             printw("%i",number);
             break;
-        case 1:
+        case 14:
             printw("%c",'A');
             break;
         case 11:
@@ -321,7 +321,7 @@ void display::printNumber(int number) {
  * 			how big the square is.
  */
 void display::eraseBox(int x, int y, int sizeX, int sizeY) {
-	string strDraw;
+  std::string strDraw;
 	int yCount;
 	int maxSizeX;
 
