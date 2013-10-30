@@ -17,15 +17,13 @@ const int numPlayers = 6;
 class Dealer {
   public:
     Dealer();
-    ~Dealer(void);
     Deck deck;
     std::vector<Card> community;
     int pot;
     int betValue;
-
     int smallBlindHolderIndex;
-    Player* determineWinner();
-    Player* players[numPlayers];
+    Player* determineWinner(Player* players[]);
+    std::vector<Player*> players;
     void dealHands();
     void dealFlop();
     void dealRiver();
@@ -34,6 +32,7 @@ class Dealer {
     void startGame();
     void endGame();
     void restartGame();
+    void roundOfBetting();
     bool userStillAlive(User user);
     static bool royalFlush(std::vector<Card> hand);
     static bool straightFlush(std::vector<Card> hand);
@@ -51,6 +50,7 @@ class Dealer {
     static Value valueOfPair(std::vector<Card> hand);
     static Value highestValue(std::vector<Card> hand);
     static int scoreHand(std::vector<Card> hand);
+    int scoreBestHand(std::vector<Card> hand);
     Player* nextPlayer(std::vector<Computer> computers, User* user);
 };
 

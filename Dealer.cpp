@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <cstring>
+#include <assert.h>
 #include "Dealer.h"
 #include "Player.h"
 #include "User.h"
@@ -12,44 +14,32 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-int main(){
-  Dealer d;
-
-}
-
 Dealer::Dealer(){
   deck.shuffle();
-  User user = User(500);
-  players[0] = &user;
+  User user(500);
+  players.push_back(&user);
   for(int i = 1; i < numPlayers+1; i++){
-    players[i] = new Computer(500);
+    Computer computer(500);
+    players.push_back(&computer);
   }
 
+  std::vector<Player*>::iterator pitr;
   for(int i = 0; i < 2; i++){
-    for(int i = 0; i < numPlayers; i++){
-      players[i]->hand.push_back(deck.dealCard());
+    for(pitr = players.begin(); pitr != players.end(); ++pitr){
+      (**pitr).hand.push_back(deck.dealCard());
     }
   }
-  //Stores who hasn't folded/run out of money
+
   smallBlindHolderIndex = 0;
+  //Game loop
   while(userStillAlive(user)){
     betValue = largeBlind;
     smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
+    roundOfBetting();
     //Show everyone their cards, take everyones input
     //Deal two cards to each player
-    for(int i = 0; i < numPlayers; i++){
-      Move move = players[i]->getMove(this);
-      //string move;
-      if(move == RAISE){
-        int amount = players[i]->getAmountForMove(this);
-        if(amount < user.wallet && amount >= betValue){
-          players[i]->wallet -= amount;
-          pot += amount;
-        }
-      }else if(move == FOLD && players[i] != &user){
-
-      }    
-    }
+    //Hand Loop
+    //Turn loop
 
     //Deal three cards
     //Take everyone's input
@@ -59,11 +49,42 @@ Dealer::Dealer(){
     //Take everyone's input
 
   }
-  
+  cout << "User has left/lost the game." << endl;
 
 }
 
-Dealer::~Dealer(void){}
+void Dealer::roundOfBetting(){
+  //All set if nobody has raised, means everyone has folded or checked
+  bool allSet;
+  std::vector<Player*>::iterator pitr;
+  while(!allSet){
+    allSet = true;
+    for(pitr = players.begin(); pitr != players.end(); ++pitr){
+      Move move = (**pitr).getMove(this);
+      if(move == RAISE){
+        //The amount they spend is the amount they need to add to match the current bet, plus their raise
+        int raise = (**pitr).getAmountForMove(this);
+        int amount = (betValue - (**pitr).currentContribution) + raise;
+        if(amount <= (**pitr).wallet){ //If they have enough money to do this
+          betValue += raise;
+          (**pitr).wallet -= amount;
+          pot += amount;
+        }
+        allSet = false;
+      }else if(move == CALL){
+        int amount = betValue - (**pitr).currentContribution;
+        if(amount < (**pitr).wallet){
+          (**pitr).wallet -= amount;
+          pot += amount;
+        }
+      }else if(move == FOLD){
+        //Kick them out of this round
+      }else{
+        assert(false);
+      }
+    }
+  }
+}
 
 bool Dealer::userStillAlive(User user){
   //First player is user, smallBlind*2 is large blind
@@ -78,30 +99,30 @@ bool Dealer::royalFlush(std::vector<Card> hand){
 bool Dealer::straightFlush(std::vector<Card> hand){
   return straight(hand) && flush(hand); }
 
-bool Dealer::fourOfAKind(std::vector<Card> hand){
-  //Map from Card value to the number of those cards you have
-  std::map<Value, int> cardCounts;
+  bool Dealer::fourOfAKind(std::vector<Card> hand){
+    //Map from Card value to the number of those cards you have
+    std::map<Value, int> cardCounts;
 
-  //Iterate over cards and initialize the map to zero at those values
-  std::vector<Card>::iterator itr;
-  for(itr = hand.begin(); itr != hand.end(); ++itr){
-    cardCounts[(*itr).value] = 0;
-  }
-
-  //Iterate over the cards again and increment the count at that value
-  for(itr = hand.begin(); itr != hand.end(); ++itr){
-    cardCounts[(*itr).value]++;
-  }
-
-  //Iterate through the map and look for a count of 4
-  std::map<Value,int>::iterator mitr;
-  for(mitr = cardCounts.begin(); mitr!=cardCounts.end(); ++mitr){
-    if((*mitr).second == 4){
-      return true;
+    //Iterate over cards and initialize the map to zero at those values
+    std::vector<Card>::iterator itr;
+    for(itr = hand.begin(); itr != hand.end(); ++itr){
+      cardCounts[(*itr).value] = 0;
     }
+
+    //Iterate over the cards again and increment the count at that value
+    for(itr = hand.begin(); itr != hand.end(); ++itr){
+      cardCounts[(*itr).value]++;
+    }
+
+    //Iterate through the map and look for a count of 4
+    std::map<Value,int>::iterator mitr;
+    for(mitr = cardCounts.begin(); mitr!=cardCounts.end(); ++mitr){
+      if((*mitr).second == 4){
+        return true;
+      }
+    }
+    return false;
   }
-  return false;
-}
 
 Value Dealer::valueOfFourOfAKind(std::vector<Card> hand){
   //Map from Card value to the number of those cards you have

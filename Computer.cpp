@@ -14,15 +14,10 @@ using std::endl;
 
 
 Computer::Computer(int startingAmount) : Player(startingAmount) {
-   wallet = startingAmount;
-   //std::vector<Card> myHand;
-   raiseAmount;
-   move;
-   alreadyFolded;
+  wallet = startingAmount;
+}
 
- }
-
- int Computer::getDecision(int handValue){
+int Computer::getDecision(int handValue){
   int random = (rand() % 100 + 1);
 
   if(handValue < 25){
@@ -31,7 +26,7 @@ Computer::Computer(int startingAmount) : Player(startingAmount) {
       if(random > 50){
         return 1;
       }else{
-      return 0;
+        return 0;
       }
     }
 
@@ -45,7 +40,7 @@ Computer::Computer(int startingAmount) : Player(startingAmount) {
       }else if((random > 0) && (random < 5)){
         return 1;
       }else{
-      return 2;
+        return 2;
       }
     }
   }
@@ -73,26 +68,26 @@ Computer::Computer(int startingAmount) : Player(startingAmount) {
       return 4;
     }
   }
- }
+}
 
 Move Computer::getMove(Dealer* d){
   double pocketValue1;
   int handValue;
   int decision;
-  
+
   //if only pocket cards use ratePocketCards method for decision
   if((hand.size())<=2){
-    
+
     pocketValue1 = ratePocketCards(hand);
-    
+
     decision = getDecision(pocketValue1);
   }else{
     handValue = Dealer::scoreHand(hand);
-    cout<< "Hand rank: " << handValue << endl;
+    //cout << "Hand rank: " << handValue << endl;
     decision = getDecision(handValue);
   }
 
-  cout<<"temp decision: " << decision << endl;
+  //cout<<"temp decision: " << decision << endl;
 
   if((decision == 0) || (decision == 3)){
     raiseAmount = 0;
@@ -119,14 +114,14 @@ int Computer::getAmountForMove(Dealer* d){
 }
 
 int Computer::ratePocketCards(std::vector<Card> pocket){
-  
+
   int pocketValue;
   std::sort(pocket.begin(),pocket.end());
-  
+
   cout<<pocket.size()<<endl;
   Card lowCard = pocket.front();
   Card highCard = pocket.back();
-  
+
   std::map<Value, double> cardPoints; 
 
   cardPoints[ACE]=10;
@@ -146,15 +141,15 @@ int Computer::ratePocketCards(std::vector<Card> pocket){
   pocketValue = cardPoints[highCard.value];
 
   if((highCard.value)==(lowCard.value)){
-      if((highCard.value)<=2){
-        pocketValue=5;
-      }else{
-        pocketValue = pocketValue*2;
-      }
+    if((highCard.value)<=2){
+      pocketValue=5;
+    }else{
+      pocketValue = pocketValue*2;
+    }
   }
   if((highCard.suit) == (lowCard.suit)){
     pocketValue = pocketValue + 2;
-    }
+  }
   if(((highCard.value) == (lowCard.value)+1) || ((highCard.value) == ((lowCard.value)-1))){
     pocketValue = pocketValue + 1;
   }
@@ -171,25 +166,25 @@ int Computer::ratePocketCards(std::vector<Card> pocket){
     pocketValue = pocketValue - 5;
   }
 
- 
-  cout<<highCard.value<<endl;
-  cout<< "Pocket Rateeee: " << pocketValue << endl;
+
+  //cout<<highCard.value<<endl;
+  //cout<< "Pocket Rateeee: " << pocketValue << endl;
   return pocketValue;
-    
+
 }
 int Computer::getFirstRaiseAmount(int handValue){
-  cout<<"here4"<<endl;
+  //cout<<"here4"<<endl;
   int random = (rand() % 100 + 1);
   if((handValue >= 15) && (handValue <= 20)){
     if(random>=50){
-      cout<<"here 2"<<endl;
+      //cout<<"here 2"<<endl;
       return (100);
     }else{
       return (50);
     }
 
   }else if (handValue < 15){
-    cout<<"here 3"<< endl;
+    //cout<<"here 3"<< endl;
     return (50);
   }
   else if (handValue > 50000){
@@ -202,23 +197,23 @@ int Computer::getFirstRaiseAmount(int handValue){
     return 75;
   }
   return 45;
-  }
-  
+}
+
 int Computer::getRaiseAmount(int handValue){
-return 0;
+  return 0;
 }
 
 
 /*Ace = 10 points
-King = 8 points
-Queen = 7 points
-Jack = 6 points
-10 through 2 = half of face value (i.e. 10 = 5, 9 = 4.5)
-Pairs, multiply score by 2 (i.e. KK = 16), minimum score for a pair is 5 (so pairs of 2 through 4 get a 5 score)
-Suited cards, add two points to highest card score
-Connectors add 1 point (i.e. KQ)
-One gap, subtract 1 point (i.e. T8)
-Two gap, subtract 2 points (i.e. AJ)
-Three gap, subtract 4 points (i.e. J7)
-Four or more gap, subtract 5 points (i.e. A4)
-*/
+  King = 8 points
+  Queen = 7 points
+  Jack = 6 points
+  10 through 2 = half of face value (i.e. 10 = 5, 9 = 4.5)
+  Pairs, multiply score by 2 (i.e. KK = 16), minimum score for a pair is 5 (so pairs of 2 through 4 get a 5 score)
+  Suited cards, add two points to highest card score
+  Connectors add 1 point (i.e. KQ)
+  One gap, subtract 1 point (i.e. T8)
+  Two gap, subtract 2 points (i.e. AJ)
+  Three gap, subtract 4 points (i.e. J7)
+  Four or more gap, subtract 5 points (i.e. A4)
+  */
