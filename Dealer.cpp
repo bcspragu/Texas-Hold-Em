@@ -10,6 +10,7 @@
 #include "User.h"
 #include "Computer.h"
 #include "Move.h"
+#include "Table.h"
 
 using std::cout;
 using std::cin;
@@ -18,6 +19,8 @@ using std::endl;
 //string playersString(std::vector<Player*> ps);
 
 Dealer::Dealer(){
+  Table t;
+  pot = 0;
   numPlayers = 6;
   User* user = new User(500);
   user->ID = 1;
@@ -31,7 +34,9 @@ Dealer::Dealer(){
 
   smallBlindLoc = -1;
   //Game loop
+
   while((*players.front()).wallet > largeBlind){
+
     //Fill and shuffle the deck before each hand
     deck.fill();
     deck.shuffle();
@@ -46,11 +51,12 @@ Dealer::Dealer(){
         numPlayers--;
       }
     }
+    t.drawBoard(this);
 
     if(numPlayers == 1){
       //Game Over, you win
     }
-
+    
     //Clear out each user's hand, then deal them a new one
     for(pitr = players.begin(); pitr != players.end(); ++pitr){
       if((*pitr) != NULL){
@@ -67,6 +73,7 @@ Dealer::Dealer(){
     }
 
     //Resetting things between rounds
+
     betValue = largeBlind;
     pot = 0;
 
@@ -114,7 +121,9 @@ Dealer::Dealer(){
         cout << "Player " << (**pitr).ID << " wins!" << endl << endl;
       }
     }
+
   }
+  
   cout << "User has left/lost the game." << endl;
 
 }

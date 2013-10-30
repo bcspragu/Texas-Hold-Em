@@ -5,7 +5,6 @@
 
 class User: public Player {
   public:
-    string lastMove;
     User(int startingAmount);
     Move getMove(Dealer* d);
     int getAmountForMove(Dealer* d);

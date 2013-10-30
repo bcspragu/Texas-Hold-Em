@@ -2,12 +2,15 @@
 #define TABLE_H
 
 #include "Move.h"
-class Dealer;
+#include "display.h"
+#include "Dealer.h"
+#include "Player.h"
+
+//class display;
 
 class Table {
   public:
-    Table();
-    ~Table(void);
+  	display gameDisplay;
     void drawBoard(Dealer* d);
     Move getUserMove();
     int getUserValue();

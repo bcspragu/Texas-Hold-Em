@@ -1,3 +1,6 @@
+#ifndef DISPLAY_H
+#define DISPLAY_H
+
 /* Title: Project 1 ECE373 Display Class Header File
  * Author: John Shield
  * Description: Defines constants and class prototypes and variables
@@ -98,3 +101,5 @@ private:
 	int	mouseEventButton;
 	int lineBoundaryOffset;
 };
+
+#endif

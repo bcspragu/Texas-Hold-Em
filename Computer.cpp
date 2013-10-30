@@ -13,6 +13,7 @@ using std::endl;
 
 Computer::Computer(int startingAmount) : Player(startingAmount) {
   wallet = startingAmount;
+  lastMove = "starting game";
 }
 
 int Computer::getDecision(int handValue){
@@ -88,18 +89,22 @@ Move Computer::getMove(Dealer* d){
 
   if((decision == 0) || (decision == 3)){
     raiseAmount = 0;
-    move = 0;
+    //move = 0;
     cout << "Player " << ID << " calls" << endl;
+    lastMove = "call";
     return CALL;
   }else if ((decision == 1) || (decision == 4)){
-    move = 1;
+    lastMove = "raise";
     raiseAmount = getRaiseAmount(d);
     cout << "Player " << ID << " raises by $" << raiseAmount << endl;
     return RAISE;
   }else if ((decision == 2) || (decision == 5)){
-    move = 2;
+    //move = 2;
     alreadyFolded = true;
     cout << "Player " << ID << " folds" << endl;
+    lastMove = "fold";
+
+
     return FOLD;
   }
   cout << "Player " << ID << " calls" << endl;

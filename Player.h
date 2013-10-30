@@ -15,6 +15,8 @@ class Player {
     int ID;
     int currentContribution;
     bool allIn;
+    string lastMove;
+
     virtual Move getMove(Dealer* d);
     virtual int getAmountForMove(Dealer* d);
     Move moveFromString(string moveStr);

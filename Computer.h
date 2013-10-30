@@ -8,7 +8,6 @@
 #include "Deck.h"
 #include "SuitValue.h"
 #include "Player.h"
-#include "Table.h"
 
 enum pocketRate {HORRIBLE, BAD, QUESTIONABLE, OK, GOOD, GREAT};
 
@@ -23,7 +22,6 @@ class Computer: public Player {
     int getRaiseAmount(Dealer* d);
     static int getDecision(int handValue);
     int raiseAmount;
-    int move;
     bool alreadyFolded;
     int handValue;
 };
