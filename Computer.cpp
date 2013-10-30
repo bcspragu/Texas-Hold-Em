@@ -11,8 +11,6 @@
 using std::cout;
 using std::endl;
 
-
-
 Computer::Computer(int startingAmount) : Player(startingAmount) {
   wallet = startingAmount;
 }
@@ -71,37 +69,22 @@ int Computer::getDecision(int handValue){
 }
 
 Move Computer::getMove(Dealer* d){
-  double pocketValue1;
   int handValue;
   int decision;
 
   std::vector<Card> allCards;
   allCards.insert(allCards.end(), hand.begin(), hand.end());
   allCards.insert(allCards.end(), (*d).community.begin(),(*d).community.end());
-  
-  std::vector<Card>::iterator pitr;
-  for(pitr = allCards.begin(); pitr != allCards.end(); ++pitr){
-      //cout<< "Card is:" <<(*pitr).value << (*pitr).suit << endl;
-    }
-
 
   //if only pocket cards use ratePocketCards method for decision
-
-  if((allCards.size())<=2){    
-    handValue= ratePocketCards(allCards);
-    decision = getDecision(pocketValue1);
-
-  }else if ((allCards.size()) == 5){
+  if(allCards.size() <= 2){    
+    handValue = ratePocketCards(allCards);
+  }else if(allCards.size() == 5){
     handValue = Dealer::scoreHand(allCards);
-    //cout << "Hand rank: " << handValue << endl;
-    decision = getDecision(handValue);
   }else if ((allCards.size()) >= 6){
     handValue = (*d).scoreBestHand(hand);
-    decision = getDecision(handValue);
   }
-  //cout<<"Hand Value: "<<handValue<<endl;
-
-  //cout<<"temp decision: " << decision << endl;
+  decision = getDecision(handValue);
 
   if((decision == 0) || (decision == 3)){
     raiseAmount = 0;
@@ -119,6 +102,7 @@ Move Computer::getMove(Dealer* d){
     cout << "Player " << ID << " folds" << endl;
     return FOLD;
   }
+  cout << "Player " << ID << " calls" << endl;
   return CALL;
 }
 
@@ -131,7 +115,7 @@ int Computer::ratePocketCards(std::vector<Card> pocket){
   int pocketValue;
   std::sort(pocket.begin(),pocket.end());
 
-  
+
   Card lowCard = pocket.front();
   Card highCard = pocket.back();
 
@@ -223,7 +207,7 @@ int Computer::getRaiseAmount(Dealer *d){
     }else if (((5*pot)/10) <= availableWallet){
       return ((5*pot)/10);
     }else{
-        return availableWallet;
+      return availableWallet;
     }  
   }else if ((handValue <=80000) && (handValue >40000)){
     if (random >= 50){
@@ -262,8 +246,8 @@ int Computer::getRaiseAmount(Dealer *d){
   return ((availableWallet*2)/30);
 
 }
-  
-  
+
+
 //int Computer::getRaiseAmount(int handValue){
 //return 0;
 //}
