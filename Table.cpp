@@ -24,32 +24,36 @@ void Table::drawBoard(Dealer* d){
     char* money;
 
     // Player 1 index 3
-	gameDisplay.drawBox(47, 6, 13, 3, 0);		// Money
-	sprintf(money,"%d",d->players[3]->wallet);
-	mvprintw(7,48,money);	// Need to refresh
-	gameDisplay.drawBox(47, 8, 13, 3, 0);		// Last action
-	mvprintw(9,48,d->players[3]->lastMove.c_str());					// Need to refresh
-	gameDisplay.displayCard(47,2,0,0, A_BOLD);
-	gameDisplay.displayCard(54,2,0,0, A_BOLD);
+    if (d->players[3] != NULL){
+		gameDisplay.drawBox(47, 6, 13, 3, 0);		// Money
+		sprintf(money,"%d",d->players[3]->wallet);
+		mvprintw(7,48,money);	// Need to refresh
+		gameDisplay.drawBox(47, 8, 13, 3, 0);		// Last action
+		mvprintw(9,48,d->players[3]->lastMove.c_str());					// Need to refresh
+		gameDisplay.displayCard(47,2,0,0, A_BOLD);
+		gameDisplay.displayCard(54,2,0,0, A_BOLD);
+	}
 	
 	// Player 2 index 2
-	gameDisplay.drawBox(10, 11, 13, 3, 0);		// Money
-	sprintf(money,"%d",d->players[2]->wallet);
-	mvprintw(12,11,money);					// Need to refresh
-	gameDisplay.drawBox(10, 13, 13, 3, 0);		// Last action
-	mvprintw(14,11,d->players[2]->lastMove.c_str());					// Need to refresh
-	gameDisplay.displayCard(10,7,0,0, A_BOLD);
-	gameDisplay.displayCard(17,7,0,0, A_BOLD);
-
+	if (d->players[2] != NULL){
+		gameDisplay.drawBox(10, 11, 13, 3, 0);		// Money
+		sprintf(money,"%d",d->players[2]->wallet);
+		mvprintw(12,11,money);					// Need to refresh
+		gameDisplay.drawBox(10, 13, 13, 3, 0);		// Last action
+		mvprintw(14,11,d->players[2]->lastMove.c_str());					// Need to refresh
+		gameDisplay.displayCard(10,7,0,0, A_BOLD);
+		gameDisplay.displayCard(17,7,0,0, A_BOLD);
+	}
 	// Player 3 index 1
-	gameDisplay.drawBox(10, 23, 13, 3, 0);		// Money
-	sprintf(money,"%d",d->players[1]->wallet);
-	mvprintw(24,11,money);					// Need to refresh
-	gameDisplay.drawBox(10, 25, 13, 3, 0);		// Last action
-	mvprintw(26,11,d->players[1]->lastMove.c_str());					// Need to refresh
-	gameDisplay.displayCard(10,19,0,0, A_BOLD);
-	gameDisplay.displayCard(17,19,0,0, A_BOLD);
-
+	if (d->players[1] != NULL){
+		gameDisplay.drawBox(10, 23, 13, 3, 0);		// Money
+		sprintf(money,"%d",d->players[1]->wallet);
+		mvprintw(24,11,money);					// Need to refresh
+		gameDisplay.drawBox(10, 25, 13, 3, 0);		// Last action
+		mvprintw(26,11,d->players[1]->lastMove.c_str());					// Need to refresh
+		gameDisplay.displayCard(10,19,0,0, A_BOLD);
+		gameDisplay.displayCard(17,19,0,0, A_BOLD);
+	}
 	// Player 4 HUMAN index 0
 	gameDisplay.drawBox(35, 33, 13, 3, 0);		// Money
 	sprintf(money,"%d",d->players[0]->wallet);
@@ -60,23 +64,25 @@ void Table::drawBoard(Dealer* d){
 	gameDisplay.displayCard(42,29,rand()%5,rand()%15, A_BOLD);
 
 	// Player 5 index 5
-	gameDisplay.drawBox(78, 23, 13, 3, 0);		// Money
-	sprintf(money,"%d",d->players[5]->wallet);
-	mvprintw(24,79,money);					// Need to refresh
-	gameDisplay.drawBox(78, 25, 13, 3, 0);		// Last action
-	mvprintw(26,79,d->players[5]->lastMove.c_str());					// Need to refresh
-	gameDisplay.displayCard(78,19,0,0, A_BOLD);
-	gameDisplay.displayCard(85,19,0,0, A_BOLD);
-
+	if (d->players[5] != NULL){
+		gameDisplay.drawBox(78, 23, 13, 3, 0);		// Money
+		sprintf(money,"%d",d->players[5]->wallet);
+		mvprintw(24,79,money);					// Need to refresh
+		gameDisplay.drawBox(78, 25, 13, 3, 0);		// Last action
+		mvprintw(26,79,d->players[5]->lastMove.c_str());					// Need to refresh
+		gameDisplay.displayCard(78,19,0,0, A_BOLD);
+		gameDisplay.displayCard(85,19,0,0, A_BOLD);
+	}
 	// Player 6 index 4
-	gameDisplay.drawBox(78, 11, 13, 3, 0);		// Money
-	sprintf(money,"%d",d->players[4]->wallet);
-	mvprintw(12,79,money);					// Need to refresh
-	gameDisplay.drawBox(78, 13, 13, 3, 0);		// Last action
-	mvprintw(14,79,d->players[4]->lastMove.c_str());					// Need to refresh
-	gameDisplay.displayCard(78,7,0,0, A_BOLD);
-	gameDisplay.displayCard(85,7,0,0, A_BOLD);
-
+	if (d->players[4] != NULL){
+		gameDisplay.drawBox(78, 11, 13, 3, 0);		// Money
+		sprintf(money,"%d",d->players[4]->wallet);
+		mvprintw(12,79,money);					// Need to refresh
+		gameDisplay.drawBox(78, 13, 13, 3, 0);		// Last action
+		mvprintw(14,79,d->players[4]->lastMove.c_str());					// Need to refresh
+		gameDisplay.displayCard(78,7,0,0, A_BOLD);
+		gameDisplay.displayCard(85,7,0,0, A_BOLD);
+	}
 	// Flop
 	mvprintw(15,51,"Flop");
 	gameDisplay.displayCard(38,16,rand()%5,rand()%15, A_BOLD);
@@ -89,10 +95,16 @@ void Table::drawBoard(Dealer* d){
     sprintf(money,"%d",d->pot);
 	mvprintw(22,47,money);
 
-	gameDisplay.captureInput(); //flushes display to screen
+    gameDisplay.drawBox(46, 23, 15, 3, 0);		// bet amount
+    sprintf(money,"%d",d->betValue);
+	mvprintw(24,47,money);
+
+	refresh();
+	getch();
 }
 
 Move Table::getUserMove(){
+
 	mvprintw(34,74,"Options");
 
 	gameDisplay.drawBox(50, 28, 19, 6, 0);		// Top Left
@@ -108,7 +120,37 @@ Move Table::getUserMove(){
 	gameDisplay.drawBox(87, 35, 19, 6, 0);		// Bottom Right
 	mvprintw(37,94,"Quit");
 
-	gameDisplay.captureInput(); //flushes display to screen
+	refresh();
+	getch(); //flushes display to screen
+
+
+	while(true){
+		char key = gameDisplay.captureInput();
+		if (key == -1){
+			int cardX = gameDisplay.getMouseEventX();
+			int cardY = gameDisplay.getMouseEventY();
+
+			if (gameDisplay.getMouseEventButton()&LEFT_CLICK){
+
+				// Top Left
+				if((cardX >= 50) && (cardX <= 68) && (cardY >= 28) && (cardY <= 33)){
+					return CALL;
+				}
+				// Top Middle
+				else if((cardX >= 69) && (cardX <= 86) && (cardY >= 28) && (cardY <= 33)){
+					return RAISE;
+				}
+				// Top Right
+				else if((cardX >= 69) && (cardX <= 86) && (cardY >= 35) && (cardY <= 40)){
+					return ALLIN;
+				}
+				// Bottom Middle
+				else if((cardX >= 87) && (cardX <= 105) && (cardY >= 28) && (cardY <= 33)){
+					return FOLD;
+				}
+			}
+		}
+	}
 
 	return FOLD;
 }

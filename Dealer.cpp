@@ -76,17 +76,20 @@ Dealer::Dealer(){
     }else{
     }
     roundOfBetting(2);
-
+    t.drawBoard(this);
     dealFlop();
-
+    t.drawBoard(this);
     roundOfBetting(0);
-
+    t.drawBoard(this);
     dealTurn();
-
+    t.drawBoard(this);
     roundOfBetting(0);
+    t.drawBoard(this);
     dealRiver();
+    t.drawBoard(this);
 
     roundOfBetting(0);
+    t.drawBoard(this);
     determineWinner();
   }
   
