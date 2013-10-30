@@ -15,7 +15,7 @@ using std::cin;
 using std::endl;
 
 Dealer::Dealer(){
-  deck.shuffle();
+  numPlayers = 6;
   User* user = new User(500);
   players.push_back(user);
   for(int i = 1; i < numPlayers; i++){
@@ -23,68 +23,135 @@ Dealer::Dealer(){
   }
 
   std::vector<Player*>::iterator pitr;
-  for(int i = 0; i < 2; i++){
-    for(pitr = players.begin(); pitr != players.end(); ++pitr){
-      (**pitr).hand.push_back(deck.dealCard());
-    }
-  }
 
+
+  int pointerOffset = 0;
   smallBlindHolderIndex = 0;
   //Game loop
   /*
   while(userStillAlive(*user)){
+    //Fill and shuffle the deck before each hand
+    deck.fill();
+    deck.shuffle();
+
+    //Kill all the players that can't make large blind
+    for(pitr = players.begin(); pitr != players.end(); ++pitr){
+      if((**pitr).wallet < largeBlind){
+        (*pitr) = NULL; //GET NULLIFIED
+        numPlayers--;
+      }
+    }
+
+    if(numPlayers == 1){
+      //Game Over, you win
+    }
+
+    //Clear out each user's hand, then deal them a new one
+    for(pitr = players.begin(); pitr != players.end(); ++pitr){
+      if((*pitr) != NULL){
+        (**pitr).hand.clear();
+      }
+    }
+
+    for(int i = 0; i < 2; i++){
+      for(pitr = players.begin(); pitr != players.end(); ++pitr){
+        if((*pitr) != NULL){
+          (**pitr).hand.push_back(deck.dealCard());
+        }
+      }
+    }
+
+    //Resetting things between rounds
     betValue = largeBlind;
+    pot = 0;
     smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
-    roundOfBetting();
-    //Show everyone their cards, take everyones input
-    //Deal two cards to each player
-    //Hand Loop
-    //Turn loop
 
-    //Deal three cards
-    //Take everyone's input
-    //Deal a card
-    //Take everyone's input
-    //Deal a card
-    //Take everyone's input
+    if(players[smallBlindHolderIndex]->wallet > smallBlind){
+      players[smallBlindHolderIndex]->wallet -= smallBlind;
+    }else{
+    }
+    roundOfBetting(2);
 
+    dealFlop();
+
+    roundOfBetting(0);
+
+    dealTurn();
+
+    roundOfBetting(0);
+    dealRiver();
+
+    roundOfBetting(0);
+    determineWinner();
   }
   */
   cout << "User has left/lost the game." << endl;
 
 }
 
-void Dealer::roundOfBetting(){
+void Dealer::dealFlop(){
+  cout << "Dealing the flop." << endl;
+  for(int i = 0; i < 3; i++){
+    community.push_back(deck.dealCard());
+  }
+  cout << "Community cards: " << Deck::displayHand(community) << endl;
+}
+
+void Dealer::dealTurn(){
+  cout << "Dealing the turn." << endl;
+  community.push_back(deck.dealCard());
+  cout << "Community cards: " << Deck::displayHand(community) << endl;
+}
+
+void Dealer::dealRiver(){
+  cout << "Dealing the river." << endl;
+  community.push_back(deck.dealCard());
+  cout << "Community cards: " << Deck::displayHand(community) << endl;
+}
+
+void Dealer::roundOfBetting(int handOffset){
+  cout << "Commence betting." << endl;
   //All set if nobody has raised, means everyone has folded or checked
   bool allSet;
+  int playerPos;
+  //Start by setting everyone's contribution to the pot to zero
   std::vector<Player*>::iterator pitr;
+  for(pitr = players.begin(); pitr != players.end(); ++pitr){
+    (**pitr).currentContribution = 0;
+  }
+
   while(!allSet){
+    cout << "Pot: $" << pot << " Bet: " << betValue << endl;
     allSet = true;
-    for(pitr = players.begin(); pitr != players.end(); ++pitr){
-      Move move = (**pitr).getMove(this);
-      if(move == RAISE){
-        //The amount they spend is the amount they need to add to match the current bet, plus their raise
-        int raise = (**pitr).getAmountForMove(this);
-        int amount = (betValue - (**pitr).currentContribution) + raise;
-        if(amount <= (**pitr).wallet){ //If they have enough money to do this
-          betValue += raise;
-          (**pitr).wallet -= amount;
-          pot += amount;
+    for(int i = ((smallBlindHolderIndex + handOffset) % players.size()); i != ((smallBlindHolderIndex+handOffset-1) % players.size()); i = ((i + 1) % players.size())){
+      if(players[i] != NULL){
+        Player* player = players[i];
+        Move move = player->getMove(this);
+        if(move == RAISE){
+          //The amount they spend is the amount they need to add to match the current bet, plus their raise
+          int raise = player->getAmountForMove(this);
+          int amount = (betValue - player->currentContribution) + raise;
+          if(amount <= player->wallet){ //If they have enough money to do this
+            betValue += raise;
+            player->wallet -= amount;
+            pot += amount;
+          }
+          allSet = false;
+        }else if(move == CALL){
+          int amount = betValue - player->currentContribution;
+          if(amount < player->wallet){
+            player->wallet -= amount;
+            pot += amount;
+          }
+        }else if(move == FOLD){
+          //Kick them out of this round
+        }else if(move == ALLIN){
+          int amount = player->wallet;
+
+        }else{
+          assert(false);
         }
-        allSet = false;
-      }else if(move == CALL){
-        int amount = betValue - (**pitr).currentContribution;
-        if(amount < (**pitr).wallet){
-          (**pitr).wallet -= amount;
-          pot += amount;
-        }
-      }else if(move == FOLD){
-        //Kick them out of this round
-      }else if(move == ALLIN){
-        int amount = (**pitr).wallet;
-        
-      }else{
-        assert(false);
+
       }
     }
   }
@@ -499,6 +566,11 @@ std::vector<Card> Dealer::bestHand(std::vector<Card> hand){
     }
   }
   return highestHand;
+}
+
+
+Player* Dealer::determineWinner(){
+  return NULL;
 }
 
 std::vector<Card> Dealer::fiveCardHand(std::vector<Card> largeHand, int i1, int i2){

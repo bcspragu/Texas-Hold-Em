@@ -14,6 +14,7 @@ class Deck {
     Card dealCard();
     int cardCount();
     static string displayHand(std::vector<Card> cards);
+    void fill();
 };
 
 #endif

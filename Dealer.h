@@ -10,9 +10,8 @@ class User;
 class Card;
 class Computer;
 
-const int smallBlind = 100;
-const int largeBlind = 100;
-const int numPlayers = 6;
+const int smallBlind = 25;
+const int largeBlind = 50;
 
 class Dealer {
   public:
@@ -22,7 +21,8 @@ class Dealer {
     int pot;
     int betValue;
     int smallBlindHolderIndex;
-    Player* determineWinner(Player* players[]);
+    int numPlayers;
+    Player* determineWinner();
     std::vector<Player*> players;
     void dealHands();
     void dealFlop();
@@ -32,7 +32,6 @@ class Dealer {
     void startGame();
     void endGame();
     void restartGame();
-    void roundOfBetting();
     bool userStillAlive(User user);
     static bool royalFlush(std::vector<Card> hand);
     static bool straightFlush(std::vector<Card> hand);
@@ -55,6 +54,7 @@ class Dealer {
     Player* nextPlayer(std::vector<Computer> computers, User* user);
   private:
     std::vector<Card> fiveCardHand(std::vector<Card> sevenCardHand, int index1, int index2);
+    void roundOfBetting(int offset);
 };
 
 #endif

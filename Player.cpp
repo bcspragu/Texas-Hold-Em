@@ -21,7 +21,7 @@ Move Player::moveFromString(string moveStr){
     return CALL;
   }else if((moveStr == "Check") || (moveStr == "CHECK") || (moveStr == "check")){
     return CALL;
-  }else if((moveStr == "Raise") || (moveStr == "RAISE") || (moveStr == "raise")){
+  }else if((moveStr == "Raise") || (moveStr == "RAISE") || (moveStr == "raise") || (moveStr == "Bet") || (moveStr == "BET") || (moveStr == "bet")){
     return RAISE;
   }else if((moveStr == "Allin") || (moveStr == "ALLIN") || (moveStr == "allin")){
     return ALLIN;
