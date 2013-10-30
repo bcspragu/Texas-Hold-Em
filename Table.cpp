@@ -84,12 +84,15 @@ void Table::drawBoard(Dealer* d){
 	gameDisplay.displayCard(50,16,rand()%5,rand()%15, A_BOLD);
 	gameDisplay.displayCard(56,16,rand()%5,rand()%15, A_BOLD);
 	gameDisplay.displayCard(62,16,rand()%5,rand()%15, A_BOLD);
-	
-	gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
-	mvprintw(22,47,"Main Pot");
 
-	
-	// Choices
+	gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
+    sprintf(money,"%d",d->pot);
+	mvprintw(22,47,money);
+
+	gameDisplay.captureInput(); //flushes display to screen
+}
+
+Move Table::getUserMove(){
 	mvprintw(34,74,"Options");
 
 	gameDisplay.drawBox(50, 28, 19, 6, 0);		// Top Left
@@ -105,14 +108,8 @@ void Table::drawBoard(Dealer* d){
 	gameDisplay.drawBox(87, 35, 19, 6, 0);		// Bottom Right
 	mvprintw(37,94,"Quit");
 
-	int keynew = 0;
-	int bet = 0;
-	bool isTurn = true;
-
 	gameDisplay.captureInput(); //flushes display to screen
-}
 
-Move Table::getUserMove(){
 	return FOLD;
 }
 
