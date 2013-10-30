@@ -55,6 +55,7 @@ class Dealer {
     Player* nextPlayer(std::vector<Computer> computers, User* user);
   private:
     std::vector<Card> fiveCardHand(std::vector<Card> sevenCardHand, int index1, int index2);
+    std::vector<Card> fiveCardHand(std::vector<Card> sixCardHand, int index);
 };
 
 #endif

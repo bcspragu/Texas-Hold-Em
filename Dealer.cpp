@@ -433,58 +433,79 @@ int Dealer::scoreHand(std::vector<Card> hand){
 }
 
 int Dealer::scoreBestHand(std::vector<Card> hand){
-  std::vector<Card> sevenCardHand;
-  sevenCardHand.insert(sevenCardHand.end(), hand.begin(), hand.end());
-  sevenCardHand.insert(sevenCardHand.end(), community.begin(), community.end());
+  std::vector<Card> moreThanFiveCardHand;
+  moreThanFiveCardHand.insert(moreThanFiveCardHand.end(), hand.begin(), hand.end());
+  moreThanFiveCardHand.insert(moreThanFiveCardHand.end(), community.begin(), community.end());
   int index1 = 0;
   int index2 = 0;
   int highestScore = 0;
-  for(int i = 0; i < 21; i++){
-    int score = scoreHand(fiveCardHand(sevenCardHand,index1,index2));
-    if(score > highestScore){
-      highestScore = score;
+  if(moreThanFiveCardHand.size() == 7){
+    for(int i = 0; i < 21; i++){
+      int score = scoreHand(fiveCardHand(moreThanFiveCardHand,index1,index2));
+      if(score > highestScore){
+        highestScore = score;
+      }
+      if(index2 == 6){
+        index1++;
+        index2 = index1+1;
+      }else{
+        index2++;
+      }
     }
-    if(index2 == 6){
-      index1++;
-      index2 = index1+1;
-    }else{
-      index2++;
+  }else{  //Six card hand
+    for(int i = 0; i < 6; i++){
+      int score = scoreHand(fiveCardHand(moreThanFiveCardHand,i,-1));
+      if(score > highestScore){
+        highestScore = score;
+      }
     }
   }
   return highestScore;
 }
 
 std::vector<Card> Dealer::bestHand(std::vector<Card> hand){
-  std::vector<Card> sevenCardHand;
+  std::vector<Card> moreThanFiveCardHand;
   std::vector<Card> highestHand;
   std::vector<Card> tempHand;
-  sevenCardHand.insert(sevenCardHand.end(), hand.begin(), hand.end());
-  sevenCardHand.insert(sevenCardHand.end(), community.begin(), community.end());
+  moreThanFiveCardHand.insert(moreThanFiveCardHand.end(), hand.begin(), hand.end());
+  moreThanFiveCardHand.insert(moreThanFiveCardHand.end(), community.begin(), community.end());
   int index1 = 0;
   int index2 = 0;
   int highestScore = 0;
-  for(int i = 0; i < 21; i++){
-    tempHand = fiveCardHand(sevenCardHand,index1,index2);
-    int score = scoreHand(tempHand);
-    if(score > highestScore){
-      highestScore = score;
-      highestHand = tempHand;
+  if(moreThanFiveCardHand.size() == 7){
+    for(int i = 0; i < 21; i++){
+      tempHand = fiveCardHand(moreThanFiveCardHand,index1,index2);
+      int score = scoreHand(tempHand);
+      if(score > highestScore){
+        highestScore = score;
+        highestHand = tempHand;
+      }
+      if(index2 == 6){
+        index1++;
+        index2 = index1+1;
+      }else{
+        index2++;
+      }
     }
-    if(index2 == 6){
-      index1++;
-      index2 = index1+1;
-    }else{
-      index2++;
+  }else{  //Six card hand
+    for(int i = 0; i < 6; i++){
+      tempHand = fiveCardHand(moreThanFiveCardHand,i,-1);
+      int score = scoreHand(tempHand);
+      if(score > highestScore){
+        highestScore = score;
+        highestHand = tempHand;
+      }
     }
   }
   return highestHand;
 }
 
-std::vector<Card> Dealer::fiveCardHand(std::vector<Card> sevenCard, int i1, int i2){
+std::vector<Card> Dealer::fiveCardHand(std::vector<Card> largeHand, int i1, int i2){
   std::vector<Card> newHand;
-  for(int i = 0; i < 7; i++){
+  int length = largeHand.size();
+  for(int i = 0; i < length; i++){
     if(i != i1 && i != i2){
-      newHand.push_back(sevenCard[i]);
+      newHand.push_back(largeHand[i]);
     }
   }
   return newHand;
