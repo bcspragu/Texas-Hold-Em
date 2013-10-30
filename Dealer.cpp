@@ -45,6 +45,7 @@ Dealer::Dealer(){
     //Kill all the players that can't make large blind
     for(pitr = players.begin(); pitr != players.end(); ++pitr){
       if((**pitr).wallet < largeBlind){
+        cout << "Player " << (**pitr).ID << " has ran out of money" << endl;
         (*pitr) = NULL; //GET NULLIFIED
         numPlayers--;
       }
@@ -120,9 +121,9 @@ Dealer::Dealer(){
     }
 
   }
-  
-  cout << "User has left/lost the game." << endl;
-
+  if((*players.front()).wallet < largeBlind){
+    cout << "User has lost the game." << endl;
+  }
 }
 
 void Dealer::dealFlop(){
