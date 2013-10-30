@@ -6,8 +6,6 @@ class Dealer;
 
 class Table {
   public:
-    Table();
-    ~Table(void);
     void drawBoard(Dealer* d);
     Move getUserMove();
     int getUserValue();

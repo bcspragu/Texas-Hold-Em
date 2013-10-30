@@ -31,6 +31,7 @@ Dealer::Dealer(){
 
   smallBlindHolderIndex = 0;
   //Game loop
+  /*
   while(userStillAlive(*user)){
     betValue = largeBlind;
     smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
@@ -48,6 +49,7 @@ Dealer::Dealer(){
     //Take everyone's input
 
   }
+  */
   cout << "User has left/lost the game." << endl;
 
 }
