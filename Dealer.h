@@ -22,8 +22,9 @@ class Dealer {
     int betValue;
     int smallBlindHolderIndex;
     int numPlayers;
-    Player* determineWinner();
+    std::vector<Player*> determineWinner();
     std::vector<Player*> players;
+    std::vector<Player*> currentRound;
     void dealHands();
     void dealFlop();
     void dealRiver();

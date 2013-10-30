@@ -17,6 +17,7 @@ Move User::getMove(Dealer* d){
   // display class will return button pressed
   // "raise", "call", "fold", "allin"
   string choice;
+  cout << "Your wallet: $" << wallet << endl;
   cout << "Your cards: " << Deck::displayHand(hand) << endl;
   cout << "Your choice: ";
   cin >> choice;

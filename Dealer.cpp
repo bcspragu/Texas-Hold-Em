@@ -33,6 +33,9 @@ Dealer::Dealer(){
     deck.fill();
     deck.shuffle();
 
+    //Clear out the community cards
+    community.clear();
+
     //Kill all the players that can't make large blind
     for(pitr = players.begin(); pitr != players.end(); ++pitr){
       if((**pitr).wallet < largeBlind){
@@ -63,12 +66,18 @@ Dealer::Dealer(){
     //Resetting things between rounds
     betValue = largeBlind;
     pot = 0;
-    smallBlindHolderIndex = (smallBlindHolderIndex + 1) % numPlayers;
 
-    if(players[smallBlindHolderIndex]->wallet > smallBlind){
-      players[smallBlindHolderIndex]->wallet -= smallBlind;
-    }else{
+    do{
+      smallBlindHolderIndex = (smallBlindHolderIndex + 1) % players.size();
     }
+    while(players[smallBlindHolderIndex] == NULL);
+
+    players[smallBlindHolderIndex]->wallet -= smallBlind;
+    players[(smallBlindHolderIndex+1) % players.size()]->wallet -= largeBlind;
+    pot += smallBlind+largeBlind;
+
+    currentRound = players;
+
     roundOfBetting(2);
 
     dealFlop();
@@ -78,10 +87,16 @@ Dealer::Dealer(){
     dealTurn();
 
     roundOfBetting(0);
+
     dealRiver();
 
     roundOfBetting(0);
-    determineWinner();
+    std::vector<Player*> winners = determineWinner();
+    for(pitr = winners.begin(); pitr != winners.end(); ++pitr){
+      if((*pitr) != NULL){
+        (**pitr).wallet += pot/winners.size();
+      }
+    }
   }
   cout << "User has left/lost the game." << endl;
 
@@ -110,20 +125,24 @@ void Dealer::dealRiver(){
 void Dealer::roundOfBetting(int handOffset){
   cout << "Commence betting." << endl;
   //All set if nobody has raised, means everyone has folded or checked
-  bool allSet;
+  bool allSet = false;
   int playerPos;
   //Start by setting everyone's contribution to the pot to zero
   std::vector<Player*>::iterator pitr;
   for(pitr = players.begin(); pitr != players.end(); ++pitr){
-    (**pitr).currentContribution = 0;
+    if((*pitr) != NULL){
+      (**pitr).currentContribution = 0;
+    }
   }
 
   while(!allSet){
-    cout << "Pot: $" << pot << " Bet: " << betValue << endl;
+    cout << "Pot: $" << pot << " Bet: $" << betValue << endl;
     allSet = true;
-    for(int i = ((smallBlindHolderIndex + handOffset) % players.size()); i != ((smallBlindHolderIndex+handOffset-1) % players.size()); i = ((i + 1) % players.size())){
-      if(players[i] != NULL){
-        Player* player = players[i];
+    for(int i = ((smallBlindHolderIndex + handOffset) % currentRound.size());
+        i != ((smallBlindHolderIndex+handOffset-1) % currentRound.size());
+        i = ((i + 1) % currentRound.size())){
+      if(currentRound[i] != NULL){
+        Player* player = currentRound[i];
         Move move = player->getMove(this);
         if(move == RAISE){
           //The amount they spend is the amount they need to add to match the current bet, plus their raise
@@ -142,10 +161,10 @@ void Dealer::roundOfBetting(int handOffset){
             pot += amount;
           }
         }else if(move == FOLD){
-          //Kick them out of this round
+          currentRound[i] == NULL;
         }else if(move == ALLIN){
           int amount = player->wallet;
-
+          
         }else{
           assert(false);
         }
@@ -567,8 +586,29 @@ std::vector<Card> Dealer::bestHand(std::vector<Card> hand){
 }
 
 
-Player* Dealer::determineWinner(){
-  return NULL;
+std::vector<Player*> Dealer::determineWinner(){
+  std::vector<Player*> winners;
+  std::vector<Player*>::iterator itr;
+  int highestScore = 0;
+  //Find the highest score
+  for(itr = currentRound.begin(); itr != currentRound.end(); ++itr){
+    if((*itr) != NULL){
+      int score = scoreBestHand((**itr).hand);
+      if(score >= highestScore){
+        highestScore = score;
+      }
+    }
+  }
+
+  //Add all players with those hands to winners array
+  for(itr = currentRound.begin(); itr != currentRound.end(); ++itr){
+    if((*itr) != NULL){
+      if(scoreBestHand((**itr).hand) == highestScore){
+        winners.push_back(*itr);
+      }
+    }
+  }
+  return winners;
 }
 
 std::vector<Card> Dealer::fiveCardHand(std::vector<Card> largeHand, int i1, int i2){
