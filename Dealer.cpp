@@ -18,7 +18,7 @@ Dealer::Dealer(){
   deck.shuffle();
   User* user = new User(500);
   players.push_back(user);
-  for(int i = 1; i < numPlayers+1; i++){
+  for(int i = 1; i < numPlayers; i++){
     players.push_back(new Computer(500));
   }
 
@@ -29,9 +29,6 @@ Dealer::Dealer(){
     }
   }
 
-  for(pitr = players.begin(); pitr != players.end(); ++pitr){
-    cout << Deck::displayHand((**pitr).hand);
-  }
   smallBlindHolderIndex = 0;
   //Game loop
   while(userStillAlive(*user)){
