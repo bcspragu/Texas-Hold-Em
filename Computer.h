@@ -9,8 +9,6 @@
 #include "SuitValue.h"
 #include "Player.h"
 
-enum pocketRate {HORRIBLE, BAD, QUESTIONABLE, OK, GOOD, GREAT};
-
 class Dealer;
 class Computer: public Player {
   public:

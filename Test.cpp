@@ -1,3 +1,17 @@
+#include "Card.h"
+#include "Dealer.h"
+#include <vector>
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+void testHands();
+void testHand(std::vector<Card> hand);
+int main(){
+  testHands();
+}
+
 void testHands(){
   std::vector<Card> royal;
   royal.push_back(Card("AH"));
