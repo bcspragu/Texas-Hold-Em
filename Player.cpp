@@ -29,3 +29,14 @@ Move Player::moveFromString(string moveStr){
     assert(false); // not a valid 
   }
 }
+
+string Player::stringFromMove(Move move){
+  if (move == FOLD) return "Fold";
+  else if (move == CALL) return "Call";
+  else if (move == RAISE) return "Raise";
+  else if (move == ALLIN) return "All In";
+  else{
+    assert(false); // not a valid input
+  }
+
+}

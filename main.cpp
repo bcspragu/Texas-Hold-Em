@@ -249,7 +249,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "You Checked/Called";
             gameDisplay.bannerBottom(messageString.str());
-            return moveFromString("call");
+            return CALL;
           }
 
           // Bottom Left
@@ -265,7 +265,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "Press SPACE to confirm                           Money raising: " << bet;
             gameDisplay.bannerBottom(messageString.str());
-            return moveFromString("raise");
+            return RAISE;
           }
           // Bottom Middle
           // ALL IN
@@ -275,7 +275,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "You went ALL IN!";
             gameDisplay.bannerBottom(messageString.str());
-            return moveFromString("allin");
+            return ALLIN;
           }
           // Top Right
           // Fold
@@ -285,7 +285,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "You Folded";
             gameDisplay.bannerBottom(messageString.str());
-            return moveFromString("fold");
+            return FOLD;
           }
           // Bottom Right
           // Quit

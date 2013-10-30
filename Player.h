@@ -20,6 +20,7 @@ class Player {
     virtual Move getMove(Dealer* d);
     virtual int getAmountForMove(Dealer* d);
     Move moveFromString(string moveStr);
+    string stringFromMove(Move move);
 };
 
 #endif
