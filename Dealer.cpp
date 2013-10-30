@@ -17,9 +17,11 @@ using std::endl;
 Dealer::Dealer(){
   numPlayers = 6;
   User* user = new User(500);
+  user->ID = 1;
   players.push_back(user);
   for(int i = 1; i < numPlayers; i++){
     players.push_back(new Computer(500));
+    players.back()->ID = i+1;
   }
 
   std::vector<Player*>::iterator pitr;
@@ -95,6 +97,7 @@ Dealer::Dealer(){
     for(pitr = winners.begin(); pitr != winners.end(); ++pitr){
       if((*pitr) != NULL){
         (**pitr).wallet += pot/winners.size();
+        cout << "Player " << (**pitr).ID << " wins!" << endl << endl;
       }
     }
   }
@@ -123,7 +126,7 @@ void Dealer::dealRiver(){
 }
 
 void Dealer::roundOfBetting(int handOffset){
-  cout << "Commence betting." << endl;
+  cout << "Player " << smallBlindHolderIndex+handOffset+1 << " bets first." << endl;
   //All set if nobody has raised, means everyone has folded or checked
   bool allSet = false;
   int playerPos;
@@ -134,7 +137,6 @@ void Dealer::roundOfBetting(int handOffset){
       (**pitr).currentContribution = 0;
     }
   }
-
   while(!allSet){
     cout << "Pot: $" << pot << " Bet: $" << betValue << endl;
     allSet = true;

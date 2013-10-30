@@ -106,14 +106,17 @@ Move Computer::getMove(Dealer* d){
   if((decision == 0) || (decision == 3)){
     raiseAmount = 0;
     move = 0;
+    cout << "Player " << ID << " calls" << endl;
     return CALL;
   }else if ((decision == 1) || (decision == 4)){
     move = 1;
     raiseAmount = getRaiseAmount(d);
+    cout << "Player " << ID << " raises by $" << raiseAmount << endl;
     return RAISE;
   }else if ((decision == 2) || (decision == 5)){
     move = 2;
-    alreadyFolded == true;
+    alreadyFolded = true;
+    cout << "Player " << ID << " folds" << endl;
     return FOLD;
   }
   return CALL;
