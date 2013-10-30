@@ -171,16 +171,15 @@ void Dealer::dealFlop(){
   gameDisplay.displayCard(50,16,community[2].suit+1,community[2].value+2, A_BOLD);
   gameDisplay.displayCard(56,16,0,0, A_BOLD);
   gameDisplay.displayCard(62,16,0,0, A_BOLD);
-  gameDisplay.drawBox(46, 23, 15, 3, 0);		// Money in Side Pot
-  mvprintw(24,47,"Side Pot");
-  gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
-  mvprintw(22,47,"Main Pot");
+  //gameDisplay.drawBox(46, 23, 15, 3, 0);		// Money in Side Pot
+  //mvprintw(24,47,"Side Pot");
   //cout << "Community cards: " << Deck::displayHand(community) << endl;
 }
 
 // have the user enter the amount to raise
 int User::getAmountForMove(Dealer* d){
-  mvprintw(22,47,"Main Pot: $"+d->pot);
+  gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
+  mvprintw(22,47,"Pot: $"+d->pot);
   for(;;){
     key2 = gameDisplay.captureInput();
     keynew = key2 - 48;
@@ -212,7 +211,8 @@ Move User::getMove(Dealer* d){
   // "raise", "call", "fold", "allin"
 
   char potstr[21];
-  sprintf(potstr, "Main Pot: $%d", d->pot);
+  gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
+  sprintf(potstr, "Pot: $%d", d->pot);
   mvprintw(22,47,potstr);
   for (;;) {
     // Refresh every textbox
@@ -249,7 +249,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "You Checked/Called";
             gameDisplay.bannerBottom(messageString.str());
-            return CALL;
+            return moveFromString("call");
           }
 
           // Bottom Left
@@ -265,7 +265,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "Press SPACE to confirm                           Money raising: " << bet;
             gameDisplay.bannerBottom(messageString.str());
-            return RAISE;
+            return moveFromString("raise");
           }
           // Bottom Middle
           // ALL IN
@@ -275,7 +275,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "You went ALL IN!";
             gameDisplay.bannerBottom(messageString.str());
-            return ALLIN;
+            return moveFromString("allin");
           }
           // Top Right
           // Fold
@@ -285,7 +285,7 @@ Move User::getMove(Dealer* d){
             messageString.str("");
             messageString << "You Folded";
             gameDisplay.bannerBottom(messageString.str());
-            return FOLD;
+            return moveFromString("fold");
           }
           // Bottom Right
           // Quit
