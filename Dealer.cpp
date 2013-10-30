@@ -45,7 +45,7 @@ Dealer::Dealer(){
     //Kill all the players that can't make large blind
     for(pitr = players.begin(); pitr != players.end(); ++pitr){
       if((**pitr).wallet < largeBlind){
-        cout << "Player " << (**pitr).ID << " has ran out of money" << endl;
+        //cout << "Player " << (**pitr).ID << " has ran out of money" << endl;
         (*pitr) = NULL; //GET NULLIFIED
         numPlayers--;
       }
@@ -55,21 +55,7 @@ Dealer::Dealer(){
       //Game Over, you win
     }
     
-    //Clear out each user's hand, then deal them a new one
-    for(pitr = players.begin(); pitr != players.end(); ++pitr){
-      if((*pitr) != NULL){
-        (**pitr).hand.clear();
-      }
-    }
-
-    for(int i = 0; i < 2; i++){
-      for(pitr = players.begin(); pitr != players.end(); ++pitr){
-        if((*pitr) != NULL){
-          (**pitr).hand.push_back(deck.dealCard());
-        }
-      }
-    }
-
+    dealHands();
     //Resetting things between rounds
 
     betValue = largeBlind;
@@ -81,9 +67,9 @@ Dealer::Dealer(){
     while(players[smallBlindLoc] == NULL);
     currentRound = players;
     players[smallBlindLoc]->wallet -= smallBlind;
-    cout << "Player " << players[smallBlindLoc]->ID << " has small blind" << endl;
+    //cout << "Player " << players[smallBlindLoc]->ID << " has small blind" << endl;
     players[(smallBlindLoc+1) % players.size()]->wallet -= largeBlind;
-    cout << "Player " << players[(smallBlindLoc+1) % players.size()]->ID << " has large blind" << endl;
+    //cout << "Player " << players[(smallBlindLoc+1) % players.size()]->ID << " has large blind" << endl;
     pot += smallBlind+largeBlind;
 
     roundOfBetting(2);
@@ -116,35 +102,16 @@ Dealer::Dealer(){
     for(pitr = winners.begin(); pitr != winners.end(); ++pitr){
       if((*pitr) != NULL){
         (**pitr).wallet += pot/winners.size();
-        cout << "Player " << (**pitr).ID << " wins!" << endl << endl;
+        //cout << "Player " << (**pitr).ID << " wins!" << endl << endl;
       }
     }
 
   }
   if((*players.front()).wallet < largeBlind){
-    cout << "User has lost the game." << endl;
+    //cout << "User has lost the game." << endl;
   }
 }
 
-void Dealer::dealFlop(){
-  cout << "Dealing the flop." << endl;
-  for(int i = 0; i < 3; i++){
-    community.push_back(deck.dealCard());
-  }
-  cout << "Community cards: " << Deck::displayHand(community) << endl;
-}
-
-void Dealer::dealTurn(){
-  cout << "Dealing the turn." << endl;
-  community.push_back(deck.dealCard());
-  cout << "Community cards: " << Deck::displayHand(community) << endl;
-}
-
-void Dealer::dealRiver(){
-  cout << "Dealing the river." << endl;
-  community.push_back(deck.dealCard());
-  cout << "Community cards: " << Deck::displayHand(community) << endl;
-}
 
 void Dealer::roundOfBetting(int handOffset){
   if(playersStillIn(currentRound) == 1){
@@ -162,7 +129,7 @@ void Dealer::roundOfBetting(int handOffset){
     }
   }
   while(!allSet){
-    cout << "Pot: $" << pot << " Bet: $" << betValue << endl;
+    //cout << "Pot: $" << pot << " Bet: $" << betValue << endl;
     allSet = true;
     for(int i = 0; i < currentRound.size(); i++){
       int index = (smallBlindLoc+handOffset+i) % currentRound.size();
