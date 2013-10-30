@@ -51,7 +51,10 @@ class Dealer {
     static Value highestValue(std::vector<Card> hand);
     static int scoreHand(std::vector<Card> hand);
     int scoreBestHand(std::vector<Card> hand);
+    std::vector<Card> bestHand(std::vector<Card> hand);
     Player* nextPlayer(std::vector<Computer> computers, User* user);
+  private:
+    std::vector<Card> fiveCardHand(std::vector<Card> sevenCardHand, int index1, int index2);
 };
 
 #endif
