@@ -17,100 +17,6 @@ using std::endl;
 
 //string playersString(std::vector<Player*> ps);
 
-Dealer::Dealer(){
-  pot = 0;
-  numPlayers = 6;
-  User* user = new User(500);
-  user->ID = 1;
-  players.push_back(user);
-  for(int i = 1; i < numPlayers; i++){
-    players.push_back(new Computer(500));
-    players.back()->ID = i+1;
-  }
-
-  std::vector<Player*>::iterator pitr;
-
-  smallBlindLoc = -1;
-  //Game loop
-
-  while((*players.front()).wallet > largeBlind){
-
-    //Fill and shuffle the deck before each hand
-    deck.fill();
-    deck.shuffle();
-
-    //Clear out the community cards
-    community.clear();
-
-    //Kill all the players that can't make large blind
-    for(pitr = players.begin(); pitr != players.end(); ++pitr){
-      if((**pitr).wallet < largeBlind){
-        //cout << "Player " << (**pitr).ID << " has ran out of money" << endl;
-        (*pitr) = NULL; //GET NULLIFIED
-        numPlayers--;
-      }
-    }
-
-    if(numPlayers == 1){
-      //Game Over, you win
-    }
-    
-    dealHands();
-    //Resetting things between rounds
-
-    betValue = largeBlind;
-    pot = 0;
-
-    do{
-      smallBlindLoc = (smallBlindLoc + 1) % players.size();
-    }
-    while(players[smallBlindLoc] == NULL);
-    currentRound = players;
-    players[smallBlindLoc]->wallet -= smallBlind;
-    //cout << "Player " << players[smallBlindLoc]->ID << " has small blind" << endl;
-    players[(smallBlindLoc+1) % players.size()]->wallet -= largeBlind;
-    //cout << "Player " << players[(smallBlindLoc+1) % players.size()]->ID << " has large blind" << endl;
-    pot += smallBlind+largeBlind;
-
-    roundOfBetting(2);
-
-    if(playersStillIn(currentRound) != 1){
-      dealFlop();
-    }
-
-    if(playersStillIn(currentRound) != 1){
-      roundOfBetting(0);
-    }
-
-    if(playersStillIn(currentRound) != 1){
-      dealTurn();
-    }
-
-    if(playersStillIn(currentRound) != 1){
-      roundOfBetting(0);
-    }
-
-    if(playersStillIn(currentRound) != 1){
-      dealRiver();
-    }
-
-    if(playersStillIn(currentRound) != 1){
-      roundOfBetting(0);
-    }
-
-    std::vector<Player*> winners = determineWinner();
-    for(pitr = winners.begin(); pitr != winners.end(); ++pitr){
-      if((*pitr) != NULL){
-        (**pitr).wallet += pot/winners.size();
-        //cout << "Player " << (**pitr).ID << " wins!" << endl << endl;
-      }
-    }
-
-  }
-  if((*players.front()).wallet < largeBlind){
-    //cout << "User has lost the game." << endl;
-  }
-}
 
 
 void Dealer::roundOfBetting(int handOffset){
@@ -129,7 +35,7 @@ void Dealer::roundOfBetting(int handOffset){
     }
   }
   while(!allSet){
-    //cout << "Pot: $" << pot << " Bet: $" << betValue << endl;
+    //cot << "Pot: $" << pot << " Bet: $" << betValue << endl;
     allSet = true;
     for(int i = 0; i < currentRound.size(); i++){
       int index = (smallBlindLoc+handOffset+i) % currentRound.size();
@@ -170,9 +76,11 @@ void Dealer::roundOfBetting(int handOffset){
             }
             player->wallet = 0;
             betValue += amount;
+            player->allIn = true;
           }else{
             assert(false);
           }
+          player->updateWallet();
         }
       }
     }

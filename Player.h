@@ -21,6 +21,7 @@ class Player {
     virtual int getAmountForMove(Dealer* d);
     Move moveFromString(string moveStr);
     string stringFromMove(Move move);
+    void updateWallet();
 };
 
 #endif

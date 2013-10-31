@@ -33,6 +33,7 @@ class Dealer {
     void startGame();
     void endGame();
     void restartGame();
+    void showAllCards();
     bool userStillAlive(User user);
     static bool royalFlush(std::vector<Card> hand);
     static bool straightFlush(std::vector<Card> hand);
