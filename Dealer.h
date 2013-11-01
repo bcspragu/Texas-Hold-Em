@@ -25,6 +25,7 @@ class Dealer {
     std::vector<Player*> determineWinner();
     std::vector<Player*> players;
     std::vector<Player*> currentRound;
+    void updateValuesOnScreen();
     void dealHands();
     void dealFlop();
     void dealRiver();

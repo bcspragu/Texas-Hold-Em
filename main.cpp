@@ -142,6 +142,52 @@ void Dealer::dealHands(){
   gameDisplay.displayCard(35,29,players.front()->hand.front().suit+1,players.front()->hand.front().value+2, A_BOLD);
   gameDisplay.displayCard(42,29,players.front()->hand.back().suit+1,players.front()->hand.back().value+2, A_BOLD);
 }
+void Dealer::updateValuesOnScreen(){
+  char tmpstr[21];
+
+  // Player 1
+  gameDisplay.drawBox(47, 6, 13, 3, 0);   // Money
+  sprintf(tmpstr, "$%d", players[1]->wallet);
+  mvprintw(7,48,tmpstr);
+  gameDisplay.drawBox(47, 8, 13, 3, 0);   // Last action
+  mvprintw(9,48,players[1]->lastMove.c_str());
+
+  // Player 2
+  gameDisplay.drawBox(10, 11, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[2]->wallet);
+  mvprintw(12,11,tmpstr);
+  gameDisplay.drawBox(10, 13, 13, 3, 0);    // Last action
+  mvprintw(14,11,players[2]->lastMove.c_str());
+
+  // Player 3
+  gameDisplay.drawBox(10, 23, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[3]->wallet);
+  mvprintw(24,11,tmpstr);
+  gameDisplay.drawBox(10, 25, 13, 3, 0);    // Last action
+  mvprintw(26,11,players[3]->lastMove.c_str());
+
+  // Player 4    HUMAN
+  gameDisplay.drawBox(35, 33, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[0]->wallet);
+  mvprintw(34,36,tmpstr);
+  gameDisplay.drawBox(35, 35, 13, 3, 0);    // Last action
+  mvprintw(36,36,players[0]->lastMove.c_str());
+
+  // Player 5
+  gameDisplay.drawBox(78, 23, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[4]->wallet);
+  mvprintw(24,79,tmpstr);
+  gameDisplay.drawBox(78, 25, 13, 3, 0);    // Last action
+  mvprintw(26,79,players[4]->lastMove.c_str());
+
+  // Player 6
+  gameDisplay.drawBox(78, 11, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[5]->wallet);
+  mvprintw(12,79,tmpstr);
+  gameDisplay.drawBox(78, 13, 13, 3, 0);    // Last action
+  mvprintw(14,79,players[5]->lastMove.c_str());
+
+}
 
 void Dealer::dealRiver(){
   //cout << "Dealing the river." << endl;
@@ -149,6 +195,7 @@ void Dealer::dealRiver(){
   //cout << "Community cards: " << Deck::displayHand(community) << endl;
   mvprintw(15,51,"River");
   gameDisplay.displayCard(62,16,community.back().suit+1,community.back().value+2, A_BOLD);
+
 }
 
 void Dealer::dealTurn(){
@@ -214,6 +261,9 @@ Move User::getMove(Dealer* d){
   gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
   sprintf(potstr, "Pot: $%d", d->pot);
   mvprintw(22,47,potstr);
+
+  d->updateValuesOnScreen();
+
   for (;;) {
     // Refresh every textbox
     // Money per player
@@ -290,7 +340,7 @@ Move User::getMove(Dealer* d){
           // Bottom Right
           // Quit
           else if((cardX >= 87) && (cardX <= 105) && (cardY >= 35) && (cardY <= 40)){
-            break;
+            exit(0);
           }
         }
       } 
@@ -324,3 +374,4 @@ void stub_PrintResize(void) {
   // prints out the information of the new screen size in a top banner
   gameDisplay.bannerTop(messageString.str());
 }
+
