@@ -235,6 +235,7 @@ void Dealer::dealHands(){
   gameDisplay.displayCard(56,16,0,0, A_BOLD);
   gameDisplay.displayCard(62,16,0,0, A_BOLD);
   hideAllCards();
+
   std::vector<Player*>::iterator pitr;
   //Clear out each user's hand, then deal them a new one
   for(pitr = players.begin(); pitr != players.end(); ++pitr){
