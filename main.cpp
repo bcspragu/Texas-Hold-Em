@@ -532,8 +532,8 @@ void Dealer::showAllCards(){
   for(pitr = players.begin(); pitr != players.end(); ++pitr){
     int suit1 = (**pitr).hand.front().suit+1;
     int value1 = (**pitr).hand.front().value+2;
-    int suit2 = (**pitr).hand.front().suit+1;
-    int value2 = (**pitr).hand.front().value+2;
+    int suit2 = (**pitr).hand.back().suit+1;
+    int value2 = (**pitr).hand.back().value+2;
     int ypos,xpos;
     switch((**pitr).ID){
       case 1:
@@ -555,9 +555,11 @@ void Dealer::showAllCards(){
       case 5:
         xpos = 78;
         ypos = 19;
+        break;
       case 6:
         xpos = 78;
         ypos = 7;
+        break;
     }
     gameDisplay.displayCard(xpos,ypos,suit1,value1, A_BOLD);
     gameDisplay.displayCard(xpos+7,ypos,suit2,value2, A_BOLD);
