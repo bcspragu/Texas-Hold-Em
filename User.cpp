@@ -9,6 +9,3 @@ using std::endl;
 User::User(int startingAmount) : Player(startingAmount){
   wallet = startingAmount;
 }
-
-
-

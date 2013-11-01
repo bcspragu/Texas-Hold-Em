@@ -13,7 +13,7 @@ using std::endl;
 
 Computer::Computer(int startingAmount) : Player(startingAmount) {
   wallet = startingAmount;
-  lastMove = "starting game";
+  lastMove = "Waiting";
 }
 
 int Computer::getDecision(int handValue){

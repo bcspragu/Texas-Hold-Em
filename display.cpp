@@ -212,7 +212,7 @@ void display::printFace(int suit, int number, int line, int printAtt) {
     if (line==2)
       printw("  J%s", joker);
     // this is the display for the cards with suits and numbers
-  } else if (suit>=1 && suit <=4 && number>=1 && number<=13) {
+  } else if (suit>=1 && suit <=4 && number>=2 && number<=14) {
     if (line==0) {
       printSuit(suit); // function to draw suit
       printNumber(number); // function to draw number
@@ -288,9 +288,6 @@ void display::printNumber(int number) {
     case 10:
       printw("%i",number);
       break;
-    case 14:
-      printw("%c",'A');
-      break;
     case 11:
       printw("%c",'J');
       break;
@@ -299,6 +296,9 @@ void display::printNumber(int number) {
       break;
     case 13:
       printw("%c",'K');
+      break;
+    case 14:
+      printw("%c",'A');
       break;
     default:
       printw(" ");

@@ -1,5 +1,8 @@
 #include "Card.h"
 #include "Dealer.h"
+#include "User.h"
+#include "Computer.h"
+#include "Deck.h"
 #include <vector>
 #include <iostream>
 

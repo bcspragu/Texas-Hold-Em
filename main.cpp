@@ -44,41 +44,43 @@ void setText(string target, string text);
 int main(int argc, char* argv[])
 {
   signal(SIGWINCH, detectResize); // enable the window resize signal
+
   // Player 1
-  gameDisplay.drawBox(47, 6, 13, 3, 0);		// Money
-  gameDisplay.drawBox(47, 8, 13, 3, 0);		// Last action
-  gameDisplay.displayCard(47,2,0,0, A_BOLD);
-  gameDisplay.displayCard(54,2,0,0, A_BOLD);
-
-  // Player 2
-  gameDisplay.drawBox(10, 11, 13, 3, 0);		// Money
-  gameDisplay.drawBox(10, 13, 13, 3, 0);		// Last action
-  gameDisplay.displayCard(10,7,0,0, A_BOLD);
-  gameDisplay.displayCard(17,7,0,0, A_BOLD);
-
-  // Player 3
-  gameDisplay.drawBox(10, 23, 13, 3, 0);		// Money
-  gameDisplay.drawBox(10, 25, 13, 3, 0);		// Last action
-  gameDisplay.displayCard(10,19,0,0, A_BOLD);
-  gameDisplay.displayCard(17,19,0,0, A_BOLD);
-
-  // Player 4    HUMAN
   gameDisplay.drawBox(35, 33, 13, 3, 0);		// Money
   gameDisplay.drawBox(35, 35, 13, 3, 0);		// Last action
   gameDisplay.displayCard(35,29,0,0, A_BOLD);
   gameDisplay.displayCard(42,29,0,0, A_BOLD);
 
+  // Player 2
+  gameDisplay.drawBox(10, 23, 13, 3, 0);		// Money
+  gameDisplay.drawBox(10, 25, 13, 3, 0);		// Last action
+  gameDisplay.displayCard(10,19,0,0, A_BOLD);
+  gameDisplay.displayCard(17,19,0,0, A_BOLD);
+
+  // Player 3
+  gameDisplay.drawBox(10, 11, 13, 3, 0);		// Money
+  gameDisplay.drawBox(10, 13, 13, 3, 0);		// Last action
+  gameDisplay.displayCard(10,7,0,0, A_BOLD);
+  gameDisplay.displayCard(17,7,0,0, A_BOLD);
+
+  // Player 4
+  gameDisplay.drawBox(47, 6, 13, 3, 0);		// Money
+  gameDisplay.drawBox(47, 8, 13, 3, 0);		// Last action
+  gameDisplay.displayCard(47,2,0,0, A_BOLD);
+  gameDisplay.displayCard(54,2,0,0, A_BOLD);
+
   // Player 5
+  gameDisplay.drawBox(78, 11, 13, 3, 0);		// Money
+  gameDisplay.drawBox(78, 13, 13, 3, 0);		// Last action
+  gameDisplay.displayCard(78,7,0,0, A_BOLD);
+  gameDisplay.displayCard(85,7,0,0, A_BOLD);
+
+  // Player 6
   gameDisplay.drawBox(78, 23, 13, 3, 0);		// Money
   gameDisplay.drawBox(78, 25, 13, 3, 0);		// Last action
   gameDisplay.displayCard(78,19,0,0, A_BOLD);
   gameDisplay.displayCard(85,19,0,0, A_BOLD);
 
-  // Player 6
-  gameDisplay.drawBox(78, 11, 13, 3, 0);		// Money
-  gameDisplay.drawBox(78, 13, 13, 3, 0);		// Last action
-  gameDisplay.displayCard(78,7,0,0, A_BOLD);
-  gameDisplay.displayCard(85,7,0,0, A_BOLD);
 
   // Choices
   mvprintw(34,74,"Options");
@@ -102,6 +104,8 @@ int main(int argc, char* argv[])
   gameDisplay.displayCard(50,16,0,0, A_BOLD);
   gameDisplay.displayCard(56,16,0,0, A_BOLD);
   gameDisplay.displayCard(62,16,0,0, A_BOLD);
+
+  gameDisplay.drawBox(46, 23, 15, 3, 0);    // Money in current bet cost
   bool onGoing = true;
   while(onGoing){
     key = gameDisplay.captureInput();
@@ -161,25 +165,29 @@ Dealer::Dealer(){
 
     if(numPlayers == 1){
       //Game Over, you win
+      return;
     }
 
     dealHands();
     //Resetting things between rounds
 
-    betValue = largeBlind;
     pot = 0;
 
     do{
-      smallBlindLoc = (smallBlindLoc + 1) % players.size();
+      smallBlindLoc = (smallBlindLoc+1) % players.size();
     }
     while(players[smallBlindLoc] == NULL);
+
+    //Try the next player first
+    largeBlindLoc = (smallBlindLoc+1) % players.size();
+    while(players[largeBlindLoc] == NULL){
+      largeBlindLoc = (largeBlindLoc+1) % players.size();
+    }
+
     currentRound = players;
     players[smallBlindLoc]->wallet -= smallBlind;
-    //cout << "Player " << players[smallBlindLoc]->ID << " has small blind" << endl;
-    players[(smallBlindLoc+1) % players.size()]->wallet -= largeBlind;
-    //cout << "Player " << players[(smallBlindLoc+1) % players.size()]->ID << " has large blind" << endl;
+    players[largeBlindLoc]->wallet -= largeBlind;
     pot += smallBlind+largeBlind;
-
 
     roundOfBetting(2);
     dealFlop();
@@ -211,6 +219,13 @@ Dealer::Dealer(){
   }
 }
 
+void Dealer::updateBet(){
+
+  char betstr[21];
+  sprintf(betstr, "Bet: $%d", betValue);
+  mvprintw(24,47,betstr);
+}
+
 void Dealer::dealHands(){
   //Draw blank community cards
   gameDisplay.displayCard(38,16,0,0, A_BOLD);
@@ -232,53 +247,56 @@ void Dealer::dealHands(){
       }
     }
   }
-  gameDisplay.displayCard(35,29,players.front()->hand.front().suit+1,players.front()->hand.front().value+2, A_BOLD);
-  gameDisplay.displayCard(42,29,players.front()->hand.back().suit+1,players.front()->hand.back().value+2, A_BOLD);
+  Card card1 = players.front()->hand.front();
+  Card card2 = players.front()->hand.back();
+
+  gameDisplay.displayCard(35,29,card1.suit+1,card1.value+2, A_BOLD);
+  gameDisplay.displayCard(42,29,card2.suit+1,card2.value+2, A_BOLD);
 }
 void Dealer::updateValuesOnScreen(){
   char tmpstr[21];
 
   // Player 1
-  gameDisplay.drawBox(47, 6, 13, 3, 0);   // Money
-  sprintf(tmpstr, "$%d", players[1]->wallet);
-  mvprintw(7,48,tmpstr);
-  gameDisplay.drawBox(47, 8, 13, 3, 0);   // Last action
-  mvprintw(9,48,players[1]->lastMove.c_str());
-
-  // Player 2
-  gameDisplay.drawBox(10, 11, 13, 3, 0);    // Money
-  sprintf(tmpstr, "$%d", players[2]->wallet);
-  mvprintw(12,11,tmpstr);
-  gameDisplay.drawBox(10, 13, 13, 3, 0);    // Last action
-  mvprintw(14,11,players[2]->lastMove.c_str());
-
-  // Player 3
-  gameDisplay.drawBox(10, 23, 13, 3, 0);    // Money
-  sprintf(tmpstr, "$%d", players[3]->wallet);
-  mvprintw(24,11,tmpstr);
-  gameDisplay.drawBox(10, 25, 13, 3, 0);    // Last action
-  mvprintw(26,11,players[3]->lastMove.c_str());
-
-  // Player 4    HUMAN
   gameDisplay.drawBox(35, 33, 13, 3, 0);    // Money
   sprintf(tmpstr, "$%d", players[0]->wallet);
   mvprintw(34,36,tmpstr);
   gameDisplay.drawBox(35, 35, 13, 3, 0);    // Last action
   mvprintw(36,36,players[0]->lastMove.c_str());
 
-  // Player 5
-  gameDisplay.drawBox(78, 23, 13, 3, 0);    // Money
-  sprintf(tmpstr, "$%d", players[4]->wallet);
-  mvprintw(24,79,tmpstr);
-  gameDisplay.drawBox(78, 25, 13, 3, 0);    // Last action
-  mvprintw(26,79,players[4]->lastMove.c_str());
+  // Player 2
+  gameDisplay.drawBox(10, 23, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[1]->wallet);
+  mvprintw(24,11,tmpstr);
+  gameDisplay.drawBox(10, 25, 13, 3, 0);    // Last action
+  mvprintw(26,11,players[1]->lastMove.c_str());
+  
+  // Player 3
+  gameDisplay.drawBox(10, 11, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[2]->wallet);
+  mvprintw(12,11,tmpstr);
+  gameDisplay.drawBox(10, 13, 13, 3, 0);    // Last action
+  mvprintw(14,11,players[2]->lastMove.c_str());
 
-  // Player 6
+  // Player 4
+  gameDisplay.drawBox(47, 6, 13, 3, 0);   // Money
+  sprintf(tmpstr, "$%d", players[3]->wallet);
+  mvprintw(7,48,tmpstr);
+  gameDisplay.drawBox(47, 8, 13, 3, 0);   // Last action
+  mvprintw(9,48,players[3]->lastMove.c_str());
+  
+  // Player 5
   gameDisplay.drawBox(78, 11, 13, 3, 0);    // Money
-  sprintf(tmpstr, "$%d", players[5]->wallet);
+  sprintf(tmpstr, "$%d", players[4]->wallet);
   mvprintw(12,79,tmpstr);
   gameDisplay.drawBox(78, 13, 13, 3, 0);    // Last action
-  mvprintw(14,79,players[5]->lastMove.c_str());
+  mvprintw(14,79,players[4]->lastMove.c_str());
+  
+  // Player 6
+  gameDisplay.drawBox(78, 23, 13, 3, 0);    // Money
+  sprintf(tmpstr, "$%d", players[5]->wallet);
+  mvprintw(24,79,tmpstr);
+  gameDisplay.drawBox(78, 25, 13, 3, 0);    // Last action
+  mvprintw(26,79,players[5]->lastMove.c_str());
 
 }
 
@@ -541,24 +559,24 @@ void Dealer::showAllCards(){
         ypos = 29;
         break;
       case 2:
-        xpos = 47;
-        ypos = 2;
+        xpos = 10;
+        ypos = 19;
         break;
       case 3:
         xpos = 10;
-        ypos = 19;
+        ypos = 7;
         break;
       case 4:
-        xpos = 10;
-        ypos = 7;
+        xpos = 47;
+        ypos = 2;
         break;
       case 5:
         xpos = 78;
-        ypos = 19;
+        ypos = 7;
         break;
       case 6:
         xpos = 78;
-        ypos = 7;
+        ypos = 19;
         break;
     }
     gameDisplay.displayCard(xpos,ypos,suit1,value1, A_BOLD);
@@ -651,40 +669,40 @@ void setText(string target, string text){
   }else if(target == "P1B"){ //Player 1 bottom box
     ypos = 36;
     xpos = 36;
-  }else if(target == "P2T"){ //Player 2 top box
+  }else if(target == "P2T"){ //Player 3 top box
+    ypos = 24;
+    xpos = 11;
+  }else if(target == "P2B"){ //Player 3 bottom box
+    ypos = 26;
+    xpos = 11;
+  }else if(target == "P3T"){ //Player 4 top box
+    ypos = 12;
+    xpos = 11;
+  }else if(target == "P3B"){ //Player 4 bottom box
+    ypos = 14;
+    xpos = 11;
+  }else if(target == "P4T"){ //Player 2 top box
     ypos = 7;
     xpos = 48;
-  }else if(target == "P2B"){ //Player 2 bottom box
+  }else if(target == "P4B"){ //Player 2 bottom box
     ypos = 9;
     xpos = 48;
-  }else if(target == "P3T"){ //Player 3 top box
-    ypos = 24;
-    xpos = 11;
-  }else if(target == "P3B"){ //Player 3 bottom box
-    ypos = 26;
-    xpos = 11;
-  }else if(target == "P4T"){ //Player 4 top box
-    ypos = 12;
-    xpos = 11;
-  }else if(target == "P4B"){ //Player 4 bottom box
-    ypos = 14;
-    xpos = 11;
-  }else if(target == "P5T"){ //Player 5 top box
-    ypos = 24;
-    xpos = 79;
-  }else if(target == "P5B"){ //Player 5 bottom box
-    ypos = 26;
-    xpos = 79;
-  }else if(target == "P6T"){ //Player 6 top box
+  }else if(target == "P5T"){ //Player 6 top box
     ypos = 12;
     xpos = 79;
-  }else if(target == "P6B"){ //Player 6 bottom box
+  }else if(target == "P5B"){ //Player 6 bottom box
     ypos = 14;
+    xpos = 79;
+  }else if(target == "P6T"){ //Player 5 top box
+    ypos = 24;
+    xpos = 79;
+  }else if(target == "P6B"){ //Player 5 bottom box
+    ypos = 26;
     xpos = 79;
   }else if(target == "C"){ //Community header
     ypos = 15;
     xpos = 51;
   }
-  mvprintw(ypos,xpos,"       ");
+  mvprintw(ypos,xpos,"          ");
   mvprintw(ypos,xpos,text.c_str());
 }
