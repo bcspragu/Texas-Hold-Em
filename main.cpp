@@ -116,6 +116,7 @@ int main(int argc, char* argv[])
       // record the location of the mouse event
       cardX = gameDisplay.getMouseEventX();
       cardY = gameDisplay.getMouseEventY();
+      //Start game
       if((cardX >= 50) && (cardX <= 68) && (cardY >= 35) && (cardY <= 40)){
         setText("B12","Playing");
         messageString.str("");
@@ -123,6 +124,8 @@ int main(int argc, char* argv[])
         gameDisplay.bannerBottom(messageString.str());
         Dealer d;
         onGoing = false;
+      }else if((cardX >= 87) && (cardX <= 105) && (cardY >= 35) && (cardY <= 40)){
+        exit(0);
       }
     }
   }
@@ -170,8 +173,8 @@ Dealer::Dealer(){
     }
 
     dealHands();
-    //Resetting things between rounds
-
+    
+    //Resetting things between rounds (pot, blinds, players in current round)
     pot = 0;
 
     do{
@@ -208,9 +211,9 @@ Dealer::Dealer(){
       }
     }
     win_str += win_strm.str();
-    win_str = win_str.substr(0,win_str.length()-1);
+    win_str = win_str.substr(0,win_str.length()-2);
     win_str += " won.";
-    mvprintw(15,51,win_str.c_str());
+    setText("C",win_str);
     showAllCards();
   }
   if((*players.front()).wallet < largeBlind){
@@ -231,6 +234,7 @@ void Dealer::dealHands(){
   gameDisplay.displayCard(50,16,0,0, A_BOLD);
   gameDisplay.displayCard(56,16,0,0, A_BOLD);
   gameDisplay.displayCard(62,16,0,0, A_BOLD);
+  hideAllCards();
   std::vector<Player*>::iterator pitr;
   //Clear out each user's hand, then deal them a new one
   for(pitr = players.begin(); pitr != players.end(); ++pitr){
@@ -480,46 +484,88 @@ Move User::getMove(Dealer* d){
   }
 }
 
+void Dealer::hideAllCards(){
+  std::vector<Player*>::iterator pitr;
+  for(pitr = players.begin(); pitr != players.end(); ++pitr){
+    if((*pitr) != NULL){
+      int suit1 = 0;
+      int value1 = 0;
+      int suit2 = 0;
+      int value2 = 0;
+      int ypos,xpos;
+      switch((**pitr).ID){
+        case 1:
+          xpos = 35;
+          ypos = 29;
+          break;
+        case 2:
+          xpos = 10;
+          ypos = 19;
+          break;
+        case 3:
+          xpos = 10;
+          ypos = 7;
+          break;
+        case 4:
+          xpos = 47;
+          ypos = 2;
+          break;
+        case 5:
+          xpos = 78;
+          ypos = 7;
+          break;
+        case 6:
+          xpos = 78;
+          ypos = 19;
+          break;
+      }
+      gameDisplay.displayCard(xpos,ypos,suit1,value1, A_BOLD);
+      gameDisplay.displayCard(xpos+7,ypos,suit2,value2, A_BOLD);
+    }
+  }
+}
+
 void Dealer::showAllCards(){
   std::vector<Player*>::iterator pitr;
   for(pitr = players.begin(); pitr != players.end(); ++pitr){
-    int suit1 = (**pitr).hand.front().suit+1;
-    int value1 = (**pitr).hand.front().value+2;
-    int suit2 = (**pitr).hand.back().suit+1;
-    int value2 = (**pitr).hand.back().value+2;
-    int ypos,xpos;
-    switch((**pitr).ID){
-      case 1:
-        xpos = 35;
-        ypos = 29;
-        break;
-      case 2:
-        xpos = 10;
-        ypos = 19;
-        break;
-      case 3:
-        xpos = 10;
-        ypos = 7;
-        break;
-      case 4:
-        xpos = 47;
-        ypos = 2;
-        break;
-      case 5:
-        xpos = 78;
-        ypos = 7;
-        break;
-      case 6:
-        xpos = 78;
-        ypos = 19;
-        break;
+    if((*pitr) != NULL && (*pitr)->lastMove != "Fold"){
+      int suit1 = (**pitr).hand.front().suit+1;
+      int value1 = (**pitr).hand.front().value+2;
+      int suit2 = (**pitr).hand.back().suit+1;
+      int value2 = (**pitr).hand.back().value+2;
+      int ypos,xpos;
+      switch((**pitr).ID){
+        case 1:
+          xpos = 35;
+          ypos = 29;
+          break;
+        case 2:
+          xpos = 10;
+          ypos = 19;
+          break;
+        case 3:
+          xpos = 10;
+          ypos = 7;
+          break;
+        case 4:
+          xpos = 47;
+          ypos = 2;
+          break;
+        case 5:
+          xpos = 78;
+          ypos = 7;
+          break;
+        case 6:
+          xpos = 78;
+          ypos = 19;
+          break;
+      }
+      gameDisplay.displayCard(xpos,ypos,suit1,value1, A_BOLD);
+      gameDisplay.displayCard(xpos+7,ypos,suit2,value2, A_BOLD);
     }
-    gameDisplay.displayCard(xpos,ypos,suit1,value1, A_BOLD);
-    gameDisplay.displayCard(xpos+7,ypos,suit2,value2, A_BOLD);
   }
 
   setText("B12","New Hand?");
-  setText("C","");
   bool onGoing = true;
   while(onGoing){
     key = gameDisplay.captureInput();
@@ -530,6 +576,7 @@ void Dealer::showAllCards(){
       cardX = gameDisplay.getMouseEventX();
       cardY = gameDisplay.getMouseEventY();
       if((cardX >= 50) && (cardX <= 68) && (cardY >= 35) && (cardY <= 40)){
+        setText("C","");
         setText("B12","Playing");
         messageString.str("");
         messageString << "Playing";
@@ -603,6 +650,9 @@ void stub_PrintResize(void) {
 
 void setText(string target, string text){
   int xpos,ypos;
+  if(longestStrings[target] < text.length()){
+    longestStrings[target] = text.length();
+  }
   if(target == "B11"){ //Box 1,1 top left
     ypos = 30;
     xpos = 55;
@@ -661,6 +711,10 @@ void setText(string target, string text){
     ypos = 15;
     xpos = 51;
   }
-  mvprintw(ypos,xpos,"          ");
+  string spaceString = "";
+  for(int i = 0; i < longestStrings[target]; i++){
+    spaceString += " ";
+  }
+  mvprintw(ypos,xpos,spaceString.c_str());
   mvprintw(ypos,xpos,text.c_str());
 }

@@ -8,7 +8,8 @@
 class Player;
 class User;
 class Card;
-class Computer; 
+class Computer;
+
 const int smallBlind = 25;
 const int largeBlind = 50;
 
@@ -35,7 +36,6 @@ class Dealer {
     void endGame();
     void restartGame();
     void showAllCards();
-    void hideAllCards();
     bool userStillAlive(User user);
     static bool royalFlush(std::vector<Card> hand);
     static bool straightFlush(std::vector<Card> hand);
