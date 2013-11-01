@@ -24,6 +24,7 @@ static void detectResize (int sig);
 // stub artifact for what the game does when the screen resizes
 void stub_PrintResize(void); 
 
+std::map<string,int> longestStrings;
 // The gameDisplay object is global, because the static signal handler object
 // needs to access the dynamic object.
 display gameDisplay;
@@ -116,7 +117,7 @@ int main(int argc, char* argv[])
       cardX = gameDisplay.getMouseEventX();
       cardY = gameDisplay.getMouseEventY();
       if((cardX >= 50) && (cardX <= 68) && (cardY >= 35) && (cardY <= 40)){
-        setText("B12","Game on");
+        setText("B12","Playing");
         messageString.str("");
         messageString << "Playing";
         gameDisplay.bannerBottom(messageString.str());
@@ -196,23 +197,21 @@ Dealer::Dealer(){
     roundOfBetting(0);
     dealRiver();
     roundOfBetting(0);
-    showAllCards();
 
     std::vector<Player*> winners = determineWinner();
     stringstream win_strm;
-    string win_str = "";
+    string win_str = "Player(s) ";
     for(pitr = winners.begin(); pitr != winners.end(); ++pitr){
       if((*pitr) != NULL){
         (**pitr).wallet += pot/winners.size();
-        win_strm << "Player " << (**pitr).ID << ",";
-        win_str = win_strm.str();
-        win_str = win_str.substr(0,win_str.length()-1);
-        win_str += " won.";
-        mvprintw(15,51,win_str.c_str());
-
+        win_strm << (**pitr).ID << ", ";
       }
     }
-
+    win_str += win_strm.str();
+    win_str = win_str.substr(0,win_str.length()-1);
+    win_str += " won.";
+    mvprintw(15,51,win_str.c_str());
+    showAllCards();
   }
   if((*players.front()).wallet < largeBlind){
     //cout << "User has lost the game." << endl;
@@ -220,7 +219,6 @@ Dealer::Dealer(){
 }
 
 void Dealer::updateBet(){
-
   char betstr[21];
   sprintf(betstr, "Bet: $%d", betValue);
   mvprintw(24,47,betstr);
@@ -269,7 +267,7 @@ void Dealer::updateValuesOnScreen(){
   mvprintw(24,11,tmpstr);
   gameDisplay.drawBox(10, 25, 13, 3, 0);    // Last action
   mvprintw(26,11,players[1]->lastMove.c_str());
-  
+
   // Player 3
   gameDisplay.drawBox(10, 11, 13, 3, 0);    // Money
   sprintf(tmpstr, "$%d", players[2]->wallet);
@@ -283,14 +281,14 @@ void Dealer::updateValuesOnScreen(){
   mvprintw(7,48,tmpstr);
   gameDisplay.drawBox(47, 8, 13, 3, 0);   // Last action
   mvprintw(9,48,players[3]->lastMove.c_str());
-  
+
   // Player 5
   gameDisplay.drawBox(78, 11, 13, 3, 0);    // Money
   sprintf(tmpstr, "$%d", players[4]->wallet);
   mvprintw(12,79,tmpstr);
   gameDisplay.drawBox(78, 13, 13, 3, 0);    // Last action
   mvprintw(14,79,players[4]->lastMove.c_str());
-  
+
   // Player 6
   gameDisplay.drawBox(78, 23, 13, 3, 0);    // Money
   sprintf(tmpstr, "$%d", players[5]->wallet);
@@ -298,38 +296,32 @@ void Dealer::updateValuesOnScreen(){
   gameDisplay.drawBox(78, 25, 13, 3, 0);    // Last action
   mvprintw(26,79,players[5]->lastMove.c_str());
 
+  updateBet();
 }
 
 void Dealer::dealRiver(){
-  //cout << "Dealing the river." << endl;
   community.push_back(deck.dealCard());
-  //cout << "Community cards: " << Deck::displayHand(community) << endl;
   setText("C","River");
   gameDisplay.displayCard(62,16,community.back().suit+1,community.back().value+2, A_BOLD);
 
 }
 
 void Dealer::dealTurn(){
-  //cout << "Dealing the turn." << endl;
   community.push_back(deck.dealCard());
   setText("C","Turn");
   gameDisplay.displayCard(56,16,community.back().suit+1,community.back().value+2, A_BOLD);
-  //cout << "Community cards: " << Deck::displayHand(community) << endl;
 }
 
 void Dealer::dealFlop(){
-  //cout << "Dealing the flop." << endl;
   for(int i = 0; i < 3; i++){
     community.push_back(deck.dealCard());
   }
-  // Flop
   setText("C","Flop");
   gameDisplay.displayCard(38,16,community[0].suit+1,community[0].value+2, A_BOLD);
   gameDisplay.displayCard(44,16,community[1].suit+1,community[1].value+2, A_BOLD);
   gameDisplay.displayCard(50,16,community[2].suit+1,community[2].value+2, A_BOLD);
   gameDisplay.displayCard(56,16,0,0, A_BOLD);
   gameDisplay.displayCard(62,16,0,0, A_BOLD);
-  //cout << "Community cards: " << Deck::displayHand(community) << endl;
 }
 
 // have the user enter the amount to raise
@@ -402,69 +394,12 @@ int Computer::getAmountForMove(Dealer* d){
   return raiseAmount;
 }
 
-int Computer::ratePocketCards(std::vector<Card> pocket){
-
-  int pocketValue;
-  std::sort(pocket.begin(),pocket.end());
-
-
-  Card lowCard = pocket.front();
-  Card highCard = pocket.back();
-
-  std::map<Value, double> cardPoints; 
-
-  cardPoints[ACE]=10;
-  cardPoints[KING]=8;
-  cardPoints[QUEEN]=7;
-  cardPoints[JACK]=6;
-  cardPoints[TEN]=5;
-  cardPoints[NINE]=4.5;
-  cardPoints[EIGHT]=4;
-  cardPoints[SEVEN]=3.5;
-  cardPoints[SIX]=3;
-  cardPoints[FIVE]=2.5;
-  cardPoints[FOUR]=2;
-  cardPoints[THREE]=1.5;
-  cardPoints[TWO]=1;
-
-  pocketValue = cardPoints[highCard.value];
-
-  if((highCard.value)==(lowCard.value)){
-    if((highCard.value)<=2){
-      pocketValue=5;
-    }else{
-      pocketValue = pocketValue*2;
-    }
-  }
-  if((highCard.suit) == (lowCard.suit)){
-    pocketValue = pocketValue + 2;
-  }
-  if(((highCard.value) == (lowCard.value)+1) || ((highCard.value) == ((lowCard.value)-1))){
-    pocketValue = pocketValue + 1;
-  }
-  if(((highCard.value) == (lowCard.value)+2) || ((highCard.value) == ((lowCard.value)-2))){
-    pocketValue = pocketValue - 1;
-  }
-  if(((highCard.value) == (lowCard.value)+3) || ((highCard.value) == ((lowCard.value)-3))){
-    pocketValue = pocketValue - 2;
-  }
-  if(((highCard.value) == (lowCard.value)+4) || ((highCard.value) == ((lowCard.value)-4))){
-    pocketValue = pocketValue - 4;
-  }
-  if(((highCard.value) == (lowCard.value)+5) || ((highCard.value) == ((lowCard.value)-5))){
-    pocketValue = pocketValue - 5;
-  }
-
-
-  //cout<<highCard.value<<endl;
-  //cout<< "Pocket Rateeee: " << pocketValue << endl;
-  return pocketValue;
-
-}
 // have the user enter their move, store it for later
 Move User::getMove(Dealer* d){
   // display class will return button pressed
   // "raise", "call", "fold", "allin"
+
+  //mvprintw(36,36,"Your Move");
 
   char potstr[21];
   gameDisplay.drawBox(46, 21, 15, 3, 0);		// Money in Pot
@@ -582,12 +517,35 @@ void Dealer::showAllCards(){
     gameDisplay.displayCard(xpos,ypos,suit1,value1, A_BOLD);
     gameDisplay.displayCard(xpos+7,ypos,suit2,value2, A_BOLD);
   }
+
+  setText("B12","New Hand?");
+  setText("C","");
+  bool onGoing = true;
+  while(onGoing){
+    key = gameDisplay.captureInput();
+    keynew = key - 48;
+    // if a mouse event occurred
+    if (key == -1) {
+      // record the location of the mouse event
+      cardX = gameDisplay.getMouseEventX();
+      cardY = gameDisplay.getMouseEventY();
+      if((cardX >= 50) && (cardX <= 68) && (cardY >= 35) && (cardY <= 40)){
+        setText("B12","Playing");
+        messageString.str("");
+        messageString << "Playing";
+        gameDisplay.bannerBottom(messageString.str());
+        onGoing = false;
+      }else if((cardX >= 87) && (cardX <= 105) && (cardY >= 35) && (cardY <= 40)){
+        exit(0);
+      }
+    }
+  }
 }
 
 void Player::updateWallet(){
   const char* move = lastMove.c_str();
   char money[10];
-  sprintf(money,"Wallet: $%d",wallet);
+  sprintf(money,"$%d",wallet);
   switch(ID){
     case 1:
       setText("P1T",money);

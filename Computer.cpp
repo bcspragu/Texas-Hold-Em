@@ -16,6 +16,62 @@ Computer::Computer(int startingAmount) : Player(startingAmount) {
   lastMove = "Waiting";
 }
 
+int Computer::ratePocketCards(std::vector<Card> pocket){
+
+  int pocketValue;
+  std::sort(pocket.begin(),pocket.end());
+
+
+  Card lowCard = pocket.front();
+  Card highCard = pocket.back();
+
+  std::map<Value, double> cardPoints; 
+
+  cardPoints[ACE]=10;
+  cardPoints[KING]=8;
+  cardPoints[QUEEN]=7;
+  cardPoints[JACK]=6;
+  cardPoints[TEN]=5;
+  cardPoints[NINE]=4.5;
+  cardPoints[EIGHT]=4;
+  cardPoints[SEVEN]=3.5;
+  cardPoints[SIX]=3;
+  cardPoints[FIVE]=2.5;
+  cardPoints[FOUR]=2;
+  cardPoints[THREE]=1.5;
+  cardPoints[TWO]=1;
+
+  pocketValue = cardPoints[highCard.value];
+
+  if((highCard.value)==(lowCard.value)){
+    if((highCard.value)<=2){
+      pocketValue=5;
+    }else{
+      pocketValue = pocketValue*2;
+    }
+  }
+  if((highCard.suit) == (lowCard.suit)){
+    pocketValue = pocketValue + 2;
+  }
+  if(((highCard.value) == (lowCard.value)+1) || ((highCard.value) == ((lowCard.value)-1))){
+    pocketValue = pocketValue + 1;
+  }
+  if(((highCard.value) == (lowCard.value)+2) || ((highCard.value) == ((lowCard.value)-2))){
+    pocketValue = pocketValue - 1;
+  }
+  if(((highCard.value) == (lowCard.value)+3) || ((highCard.value) == ((lowCard.value)-3))){
+    pocketValue = pocketValue - 2;
+  }
+  if(((highCard.value) == (lowCard.value)+4) || ((highCard.value) == ((lowCard.value)-4))){
+    pocketValue = pocketValue - 4;
+  }
+  if(((highCard.value) == (lowCard.value)+5) || ((highCard.value) == ((lowCard.value)-5))){
+    pocketValue = pocketValue - 5;
+  }
+
+  return pocketValue;
+}
+
 int Computer::getDecision(int handValue){
   int random = (rand() % 100 + 1);
 
@@ -143,7 +199,6 @@ int Computer::getRaiseAmount(Dealer *d){
 
   }
   return ((availableWallet*2)/30);
-
 }
 
 
