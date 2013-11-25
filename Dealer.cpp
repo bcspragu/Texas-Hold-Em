@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include <cstring>
-#include <assert.h>
 #include "Dealer.h"
 #include "Player.h"
 #include "User.h"
@@ -15,89 +14,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-void Dealer::roundOfBetting(int handOffset){
-  if(playersStillIn(currentRound) == 1){
-    return; //There's only one person, we don't need to play
-  }
-  //Reset the value to stay in to the large blind
-  betValue = largeBlind;
-  
-  //All set if nobody has raised, means everyone has folded or checked
-  bool allSet = false;
-  
-  //Start by setting everyone's contribution to the current round of betting to zero
-  std::vector<Player*>::iterator pitr;
-  for(pitr = players.begin(); pitr != players.end(); ++pitr){
-    if((*pitr) != NULL){
-      (**pitr).currentContribution = 0;
-      (**pitr).allIn = false;
-    }
-  }
-  while(!allSet){
-    //cot << "Pot: $" << pot << " Bet: $" << betValue << endl;
-    allSet = true;
-    for(int i = 0; i < currentRound.size(); i++){
-      int index = (smallBlindLoc+handOffset+i) % currentRound.size();
-      if(currentRound[index] != NULL){
-        Player* player = currentRound[index];
-        if(!(player->allIn)){
-          Move move = player->getMove(this);
-          if(move == RAISE){
-            //The amount they spend is the amount they need to add to match the current bet, plus their raise
-            int raise = player->getAmountForMove(this);
-            int amount = (betValue - player->currentContribution) + raise;
-            if(amount <= player->wallet){ //If they have enough money to do this
-              betValue += raise;
-              player->currentContribution += amount;
-              player->wallet -= amount;
-              pot += amount;
-            }else{ //If they don't have enough, put them all in
-              player->allIn = true;
-              //Only increase the actual bet by how much new they're adding in
-              betValue += player->wallet - (betValue - player->currentContribution);
-              player->currentContribution += player->wallet;
-              pot += player-> wallet;
-              player->wallet = 0;
-            }
-            allSet = false;
-          }else if(move == CALL){
-            int amount = betValue - player->currentContribution;
-            if(amount <= player->wallet){
-              player->currentContribution += amount;
-              player->wallet -= amount;
-              pot += amount;
-            }else{ //If they don't have enough, put them all in
-              player->allIn = true;
-              //Only increase the actual bet by how much new they're adding in
-              betValue += player->wallet - (betValue - player->currentContribution);
-              player->currentContribution += player->wallet;
-              pot += player-> wallet;
-              player->wallet = 0;
-              allSet = false;
-            }
-          }else if(move == FOLD){
-            currentRound[index] = NULL;
-            if(playersStillIn(currentRound) == 1){
-              return; //There's only one person, we don't need to play
-            }
-          }else if(move == ALLIN){
-            //Only increase the actual bet by how much new they're adding in
-            betValue += player->wallet - (betValue - player->currentContribution);
-            player->currentContribution += player->wallet;
-            pot += player-> wallet;
-            player->wallet = 0;
-            allSet = false;
-            player->allIn = true;
-          }else{
-            assert(false);
-          }
-          player->updateWallet();
-        }
-      }
-    }
-  }
-  updateBet();
-}
 
 //A royal flush is just a straight flush from 10-ACE
 bool Dealer::royalFlush(std::vector<Card> hand){
